@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>种苗箱控制方案（虚构填写示例）｜专利审核报告</title>
+  <style>:root {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --paper: #fff;
+  --ink: #14243b;
+  --muted: #4b5e75;
+  --blue: #204e92;
+  --line: #d9e2ed;
+  --soft: #edf4ff;
+  font: 16px/1.7 "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); }
+[hidden] { display: none !important; }
+a { color: var(--blue); text-underline-offset: .2em; }
+a:hover { color: #13386d; }
+:focus-visible { outline: 3px solid #2867bc; outline-offset: 4px; }
+.container { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+h1, h2, h3, h4, h5, p, dl, dd { margin: 0; }
+h1, h2, h3, p, li, td, dd, a { overflow-wrap: anywhere; }
+h2 { font-size: 1.45rem; line-height: 1.35; }
+h3 { font-size: 1.28rem; line-height: 1.45; }
+h4 { font-size: .88rem; color: var(--blue); margin-bottom: 8px; }
+.skip { position: absolute; top: 10px; left: 20px; z-index: 5; padding: 8px 16px; background: white; transform: translateY(-150%); }
+.skip:focus { transform: none; }
+.hero { background: #122742; color: white; padding: 30px 0 24px; }
+h1 { font-size: clamp(1.85rem, 5vw, 2.8rem); letter-spacing: -.025em; line-height: 1.2; margin-bottom: 16px; }
+
+.patent-meta { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+.patent-meta > div { display: flex; flex-wrap: wrap; gap: 2px 7px; min-width: 0; max-width: 100%; font-size: .82rem; }
+.patent-meta dt { color: #bfd0e8; }
+.patent-meta dd { min-width: 0; font-weight: 700; font-variant-numeric: tabular-nums; white-space: pre-wrap; }
+.navigation { position: sticky; top: 0; z-index: 2; background: var(--paper); border-bottom: 1px solid var(--line); }
+.navigation .container { display: flex; flex-wrap: wrap; align-items: center; gap: 0 20px; }
+.navigation a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; font-weight: 700; font-size: .88rem; white-space: nowrap; }
+.navigation a:hover, .navigation a:focus-visible { text-decoration: underline; }
+.navigation a[aria-current="location"] { box-shadow: inset 0 -3px #4476bb; color: #122742; }
+section, .issue, .original, .related, .related-records, .legal, .edits, #main { scroll-margin-top: calc(var(--nav-height, 89px) + 18px); }
+main { padding-block: 22px 28px; }
+.overview { display: grid; grid-template-columns: 1fr 1.25fr; align-items: start; gap: 14px; }
+.panel, .issue, table { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+.summary, .priority { padding: 19px 22px; min-width: 0; }
+.summary h2 { margin-block: 4px 8px; }
+.summary p, .intro { color: var(--muted); }
+
+.gaps { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 4px; }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 0 10px; flex-wrap: wrap; }
+.section-head h4 { margin: 0; }
+.gaps h3 { font-size: .95rem; }
+.gaps ul { list-style: none; padding: 0; margin: 0; color: var(--muted); font-size: .87rem; }
+.gaps li + li { margin-top: 3px; }
+.gaps a, .return-link { display: inline-flex; min-height: 44px; align-items: center; font-size: .82rem; }
+.priority h2 { font-size: 1.02rem; }
+.priority ul { margin: 6px 0 0; padding: 0; list-style: none; }
+.priority li { display: flex; align-items: center; gap: 8px; min-height: 44px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+.priority li:last-child { border: 0; }
+.priority a:hover { text-decoration: underline; }
+.priority a { flex: 1; display: flex; align-items: center; min-width: 0; min-height: 44px; padding-block: 5px; text-decoration: none; line-height: 1.45; font-weight: 700; }
+.priority .action-link { display: grid; grid-template-columns: 3.4em minmax(0, 1fr); align-items: baseline; padding-block: 6px; }
+.action-link > b { color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+.action-link small { font-weight: 400; line-height: 1.4; margin-top: 2px; }
+.keep { white-space: nowrap; }
+.section { margin-top: 34px; }
+.section > h2 { margin-bottom: 9px; }
+.intro { margin-bottom: 12px; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 12px; margin-bottom: 12px; }
+.toolbar label { display: grid; gap: 3px; min-width: 0; max-width: 100%; font-size: .81rem; color: var(--muted); font-weight: 700; }
+button, select, input { font: inherit; font-size: .91rem; color: var(--ink); min-height: 44px; border: 1px solid #aabbd0; border-radius: 7px; padding: 6px 10px; background: var(--paper); }
+input { width: 15em; max-width: 100%; }
+select { min-width: 0; max-width: min(19em, 100%); }
+button { cursor: pointer; }
+button:hover { background: var(--soft); }
+output { align-self: flex-end; min-height: 44px; display: flex; align-items: center; font-size: .84rem; color: var(--muted); }
+.empty { padding: 12px 16px; border: 1px dashed #aabbd0; border-radius: 8px; background: var(--paper); }
+.issue-list { display: grid; gap: 16px; }
+.issue { padding: 21px 24px; }
+.issue:target { border-left: 3px solid #4476bb; }
+.issue-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .82rem; color: var(--muted); }
+.issue-meta b { color: var(--blue); font-variant-numeric: tabular-nums; }
+.filter-exception { color: #754510; }
+.chip { display: inline-block; border-radius: 6px; padding: 2px 7px; background: #edf2f8; color: #344b66; font-size: .76rem; font-weight: 700; line-height: 1.55; }
+.chip.high, .chip.danger { color: #852e28; background: #fbe9e6; }
+.chip.medium, .chip.partial, .chip.unclear, .chip.warn { color: #754510; background: #faeedb; }
+.chip.reviewed, .chip.seen, .chip.supported, .chip.good { color: #195847; background: #e5f3ee; }
+.issue-heading { margin-block: 5px 4px; }
+.issue-summary { color: var(--muted); font-size: .93rem; }
+.issue-jumps { display: flex; gap: 0 12px; flex-wrap: wrap; font-size: .83rem; margin-bottom: 5px; }
+.issue-jumps a { display: inline-flex; align-items: center; min-height: 44px; }
+.issue-reading { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.issue ul, .issue ol { padding: 0; margin: 0; list-style: none; }
+.original { padding: 13px 15px; background: #f5f7fb; border-radius: 8px; }
+.original li + li, .legal li + li, .edits li + li { margin-top: 9px; }
+.location, .sub, small { display: block; color: var(--muted); font-size: .83rem; }
+.original blockquote + .location { margin-top: 7px; }
+blockquote { margin: 2px 0 0; border-left: 2px solid #a9bdd8; padding-left: 9px; color: #263b55; }
+.finding { padding-block: 12px; }
+.related { margin-top: 14px; border: 1px solid var(--line); border-radius: 8px; background: #f5f8fc; }
+.related summary { min-height: 44px; padding: 10px 12px; cursor: pointer; color: var(--blue); font-weight: 700; }
+.related summary span { margin-inline-start: 6px; font-size: .82rem; color: var(--muted); font-weight: 400; }
+.related-content { padding: 0 12px 6px; }
+.related h5 { font-size: .88rem; color: var(--blue); margin: 10px 0 5px; }
+.related-table th:first-child { width: 18%; }
+.legal { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.legal li p, .edits li p { margin-top: 2px; }
+.legal strong, .edits strong { font-size: .93rem; }
+.edits { margin-top: 14px; padding: 13px 15px; border-radius: 8px; background: var(--soft); }
+.edits ol { counter-reset: edits; }
+.edits li { position: relative; counter-increment: edits; padding-left: 26px; }
+.edits li::before { content: counter(edits); position: absolute; left: 0; top: 3px; display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; background: #dceaff; color: #204e92; font-size: .74rem; font-weight: 700; }
+.stage-note { color: #344d72; font-size: .87rem; line-height: 1.5; padding-block: 4px; }
+.stage-note b { display: inline-block; background: #dce9fb; color: #1c4584; padding: 1px 5px; border-radius: 4px; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; overflow: hidden; table-layout: fixed; }
+th, td { vertical-align: top; padding: 10px 12px; }
+th { background: var(--soft); font-size: .82rem; color: #304e78; }
+td { font-size: .89rem; border-top: 1px solid var(--line); }
+td p { margin-block: 3px; }
+.cell-label { display: none; }
+.table-wrap .issue-link { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; margin-inline-end: 3px; padding-inline: 6px; font-weight: 700; }
+.coverage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+footer { display: flex; justify-content: space-between; gap: 8px; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+footer a, .section-link { display: inline-flex; align-items: center; min-height: 44px; }
+@media screen and (max-width: 780px) {
+  .overview, .issue-reading { grid-template-columns: 1fr; gap: 10px; }
+  .finding { padding-block: 4px; }
+  table, tbody { display: block; border: 0; background: transparent; border-radius: 0; overflow: visible; }
+  thead { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+  tr { display: block; background: var(--paper); border: 1px solid var(--line); border-radius: 9px; padding: 7px 12px; margin-bottom: 8px; }
+  td { display: grid; grid-template-columns: minmax(6.3em, 24%) minmax(0, 1fr); gap: 6px; border: 0; padding: 4px 0; }
+  .cell-label { display: block; color: var(--muted); font-weight: 700; font-size: .79rem; }
+}
+@media screen and (max-width: 520px) {
+  .container { width: calc(100% - 28px); }
+  .hero { padding: 14px 0 12px; }
+  h1 { margin-bottom: 10px; font-size: clamp(1.32rem, 5.7vw, 1.65rem); }
+  .patent-meta { gap: 4px 12px; }
+  .navigation .container { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; text-align: center; }
+  .navigation a { justify-content: center; white-space:normal; line-height:1.35; padding:6px 2px; }
+  section, .issue, .original, .related, .related-records, .legal, .edits, #main { scroll-margin-top: calc(var(--nav-height, 89px) + 18px); }
+  main { padding-top: 14px; }
+  .section { margin-top: 26px; }
+  .summary, .priority, .issue { padding: 14px; }
+  .summary p { font-size: .93rem; line-height: 1.5; }
+  .summary h2 { font-size: 1.25rem; margin-block: 2px 5px; }
+  .issue h3 { font-size: 1.15rem; }
+  .issue-heading { margin-bottom: 2px; }
+  .coverage { grid-template-columns: 1fr; }
+  .toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolbar .search-control { grid-column: 1/-1; }
+  input { width: 100%; }
+  select { width: 100%; }
+}
+@media print {
+  :root { font-size: 11pt; }
+  body { background: white; }
+  .container { width: 100%; }
+  .hero { background: white; color: var(--ink); padding: 0; }
+  .hero dt { color: var(--muted); }
+  .navigation, .toolbar, .skip, .filter-empty, .issue-jumps, .related, .return-link, .filter-exception { display: none !important; }
+  .overview, .issue-reading, .coverage { display: block; }
+  .issue, .panel, .coverage-row { box-shadow: none; }
+  .issue h3, .issue h4, h2 { break-after: avoid; }
+  .issue li, tr { break-inside: avoid; }
+  .issue[hidden] { display: block !important; }
+  tr[hidden] { display: revert !important; }
+}
+@page { margin: 13mm; }
+
+.copy { white-space: pre-wrap; overflow-wrap: anywhere; }
+.chip { max-width: 100%; overflow-wrap: anywhere; }
+.priority .chip { flex: none; }
+.original, .finding, .coverage-row, .table-wrap { min-width: 0; }
+.coverage-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding: 10px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 9px; }
+.coverage-row .chip { flex: none; }
+.section-link { font-weight: 700; }
+.filter-empty { margin-bottom: 10px; }
+
+.matrix th:nth-child(1) { width: 11%; }
+.matrix th:nth-child(2) { width: 27%; }
+.matrix th:nth-child(3) { width: 19%; }
+.matrix th:nth-child(5) { width: 13%; }
+.figure-table th:nth-child(1) { width: 20%; }
+.figure-table th:nth-child(3) { width: 16%; }
+.search-table th:nth-child(1) { width: 13%; }
+.delivery-table th:nth-child(1) { width: 26%; }
+.delivery-table th:nth-child(2) { width: 16%; }
+@media print {
+  .coverage-row { margin-bottom: 5px; break-inside: avoid; }
+  .table-wrap .issue-link { min-height: 0; padding: 0; }
+  th, td { padding: 5px; font-size: 9pt; }
+}
+  
+      .review-extra{padding:1rem;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;margin:1rem 0}
+      .review-extra summary{font-weight:700;cursor:pointer}.review-extra ul{padding-inline-start:1.25rem}
+      .review-extra li{margin:.5rem 0}.review-extra li small{margin-left:.4rem;color:#475569}
+      .review-extra li p{margin:.25rem 0 .85rem}
+      .review-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr));gap:1rem;margin-top:1rem}
+      .review-gallery figure{margin:0}.review-gallery img{width:100%;height:auto;border:1px solid #cbd5e1;background:white}
+      h1{letter-spacing:normal}
+      h4{font-size:.97rem;font-weight:700}
+      .reading-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+      .conclusion-points p+p{margin-top:10px}
+      .conclusion-points b{display:block;color:var(--ink)}
+      .chip.neutral{color:#344b66;background:#edf2f8}
+      #mechanism>p{max-width:56rem;margin-bottom:12px}
+      #mechanism .term-note{font-size:.88rem;color:var(--muted)}
+      .document-key{padding:10px 14px;margin:4px 0 12px;background:#f5f7fb;border-radius:8px;font-size:.87rem}
+      .document-key a{display:block;margin-top:4px}
+      #drawing-pages,#reference-patents{margin-top:18px}
+      #drawing-pages,#reference-patents,#reading-guide{scroll-margin-top:calc(var(--nav-height,89px) + 18px)}
+      .legal summary{cursor:pointer;font-weight:700;color:var(--blue);padding-bottom:8px}
+      .legal-body{padding:5px 0 10px}
+      
+      .gaps b{display:block;margin-top:6px}
+      .context-links{margin-bottom:12px}
+      
+      .matrix blockquote{overflow-wrap:break-word;word-break:normal} .original blockquote{overflow-wrap:break-word;word-break:normal}
+      @media screen and (max-width:520px){.navigation a{font-size:.79rem}}
+      @media print{.review-extra{break-inside:auto}.review-gallery{grid-template-columns:repeat(3,1fr)}
+      .legal summary{display:block}#reading-guide{break-inside:avoid}}
+    
+      :root{--nav-height:89px}@media(min-width:1101px){:root{--nav-height:45px}}
+      .legal summary .chip{margin-left:10px;vertical-align:middle;font-size:.78rem}
+      .overview-extra{grid-column:1/-1;margin:0}.overview-extra summary h3{display:inline;font-size:1rem}
+      .overview-extra>p{margin:12px 0;max-width:52rem}
+      .matrix tr.claim-group-start td{border-top:2px solid #a7bdd8}
+      .summary p,.issue-summary,.finding p{max-width:42rem}
+      .edits .copy{max-width:48rem}.search-scope>p{max-width:56rem}
+      #reference-patents,.search-scope{margin:0}#search h3{margin:22px 0 10px}
+      #search h3+details.review-extra{margin-top:0}
+      .search-scope th:first-child{width:24%}
+      #conditions th:first-child{width:22%}#conditions th:nth-child(3){width:16%}
+      #claim-overview th:first-child{width:18%}#claim-overview th:nth-child(2){width:30%}
+      #claim-overview th:nth-child(3){width:52%}
+      #claim-overview{scroll-margin-top:calc(var(--nav-height,89px) + 18px)}
+      #claim-overview td a{display:inline-block;min-height:44px;line-height:44px;padding:0 3px}
+      .coverage-note{display:block;margin-top:5px;color:var(--muted)}
+      .delivery-table th:nth-child(3){width:24%}.priority li{break-inside:avoid}
+      .reading-note{margin:8px 0 10px}
+      .print-evidence-links{display:none}
+      @media print{.print-evidence-links{display:block;font-size:9pt;color:#475569;margin:8px 0}}
+      @media screen and (max-width:780px){
+        .matrix tr.claim-group-start{border-top:3px solid #a7bdd8;margin-top:22px}
+        .matrix tr.claim-group-start td{border-top:0}
+        .legal summary .chip{margin:5px 0 0 8px;white-space:normal}
+      }
+    
+/* Shared content components: titles, evidence reading and print preservation. */
+.reference-list{list-style:none;padding:0}.reference-list li+li{margin-top:16px}
+.reference-list li{scroll-margin-top:calc(var(--nav-height,89px) + 18px)}
+.reference-list a{display:inline-flex;align-items:center;min-height:44px}
+.reference-list p{max-width:56rem}.review-extra>p{margin-top:10px}
+.review-extra summary h3{display:inline;font-size:1rem}
+#drawing-pages h3{margin:22px 0 10px}.review-gallery figcaption{font-size:.85rem;color:var(--muted)}
+.reading-note{font-variant-numeric:tabular-nums}
+@media print{
+  .overview-links,.edits>.return-link{display:none}
+  .review-gallery{display:block}.review-gallery figure{break-inside:avoid;margin:10mm 0}
+  .review-gallery img{display:block;width:auto;max-width:100%;max-height:225mm;margin:auto}
+  .review-extra summary{list-style:none}.review-extra summary::marker{content:""}
+  #claim-overview td a{min-height:0;line-height:inherit}
+}
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到报告正文</a>
+  <header class="hero"><div class="container"><h1>种苗箱控制方案（虚构填写示例）｜专利审核报告</h1><dl class="patent-meta"><div><dt>审核版本</dt><dd>虚构申请前稿 V1</dd></div><div><dt>审核阶段</dt><dd>申请前示例，无真实申请</dd></div><div><dt>报告用途</dt><dd>填写与交互演示</dd></div><div><dt>审阅立场</dt><dd>申请人稿件自查</dd></div><div><dt>法域</dt><dd>示例未指定，未作法律定性</dd></div><div><dt>人工复核</dt><dd>示例未进行人工案件复核</dd></div></dl></div></header>
+  <nav class="navigation" aria-label="报告章节"><div class="container"><a href="#overview">审核概览</a><a href="#mechanism">技术与路径</a><a href="#issues">审核意见</a><a href="#evidence">权利要求对照</a><a href="#figures">附图与原图</a><a href="#conditions">控制与工况</a><a href="#search">现有技术</a><a href="#delivery">范围与交付</a></div></nav>
+  <main id="main" class="container" tabindex="-1">
+    <section id="overview" class="overview" aria-labelledby="overview-title"><div class="panel summary"><h2 id="overview-title">审核概览</h2><p class="copy">本示例演示怎样记录阈值边界和处理进度。它不对应真实专利，不能作为法律结论。</p><p class="overview-links"><a href="#claim-overview">查看权利要求与关联意见速览 ↓</a></p><div class="gaps"><div class="section-head"><h3>目前缺什么</h3><a href="#delivery">查看审核范围</a></div><ul><li><b>附图</b>示例未提供原图，附图对应关系未核读。</li><li><b>独权检索</b>示例未执行检索，不评价新颖性或创造性。</li></ul></div></div><aside class="panel priority" aria-labelledby="priority-title"><h2 id="priority-title">优先待办</h2><p class="reading-note">按本轮建议处理顺序排列，编号用于关联证据。</p><ul><li><a class="action-link" href="#issue-EX-01"><b>EX-01</b><span><strong>阈值等值动作</strong><small>控制研发 · 确认等于阈值时的动作及恢复条件。</small></span></a></li></ul></aside><details class="review-extra overview-extra" id="reading-guide" tabindex="-1"><summary><h3>如何阅读意见和候选改法</h3></summary><p class="copy">意见编号用于稳定关联证据，处理顺序以优先级和待办为准。待核事项、处理进度和法律判断分别记录。</p><a class="return-link" id="guide-return" href="#overview" hidden>返回来源意见</a></details><details class="review-extra overview-extra" id="claim-overview" tabindex="-1"><summary><h3>2 项权利要求与关联意见速览</h3></summary><p>关联意见据“权利要求对照”逐行汇总。编号链接可查看完整标题、证据和建议。未列关联意见不表示已排除风险；本表不单独作侵权或无效结论。</p><div class="table-wrap"><table role="table"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">权利要求</th><th scope="col" role="columnheader">类型及引用</th><th scope="col" role="columnheader">关联意见</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">权利要求</span><div><span class="keep">权 1</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">类型及引用</span><div>独立权利要求</div></td><td role="cell"><span class="cell-label" aria-hidden="true">关联意见</span><div><a href="#issue-EX-01" title="开启阈值的等值动作待确认" aria-label="EX-01 开启阈值的等值动作待确认">EX-01</a></div></td></tr><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">权利要求</span><div><span class="keep">权 2</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">类型及引用</span><div>从属权利要求，引用<span class="keep">权 1</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">关联意见</span><div>未单列关联意见</div></td></tr></tbody></table></div></details></section>
+<section id="mechanism" class="section " aria-labelledby="mechanism-title"><h2 id="mechanism-title">技术与路径</h2><p class="copy">示例方案将光照传感器装在托盘旁、补光灯装在箱顶内侧。控制器读取照度，在低于阈值时打开补光灯；等值和恢复动作待确认。</p><details class="review-extra " id="claim-paths" tabindex="-1"><summary><h3>查看权利要求路径与技术要点</h3></summary><p class="copy">从属项继承其实际引用路径中的全部限定，再增加自身限定。兄弟项不自动组合；择一引用按各条路径分别核对。</p><ul><li><strong><span class="keep">权 1</span></strong> 控制器根据照度控制箱顶补光灯。<small>路径：1</small></li><li><strong><span class="keep">权 2</span></strong> 传感器装在托盘旁。<small>路径：1 → 2</small></li></ul></details></section>
+<section id="issues" class="section " aria-labelledby="issues-title"><h2 id="issues-title">审核意见</h2><p class="intro">按原文、问题、对应图证和修改建议阅读；法律依据可在每条意见内展开。</p><div class="toolbar" hidden><label class="search-control">查找意见<input id="issue-query" type="search" placeholder="编号、关键词或原文"></label><label hidden>分项<select id="section-filter"><option value="">全部分项</option><option value="description">说明书</option></select></label><label>处理进度<select id="issue-filter"><option value="">全部进度</option><option value="pending">待确认</option><option value="resolved">已解决</option></select></label><label>优先级<select id="priority-filter"><option value="">全部优先级</option><option value="medium">中优先级</option><option value="low">低优先级</option></select></label><label>待核事项<select id="confirmation-filter"><option value="">全部待核事项</option><option value="technical">待研发确认</option><option value="none">无待核事项</option></select></label><button id="reset-issues" type="button">重置筛选</button><output id="issue-count" aria-live="polite"></output></div><p class="empty filter-empty" id="issue-empty" hidden>没有符合当前筛选条件的意见，请调整条件。</p><div class="issue-list">
+<article class="issue" id="issue-EX-01" data-section="description" data-status="pending" data-confirmation="technical" data-priority="medium" tabindex="-1">
+  <div class="issue-meta"><b>EX-01</b><span class="chip warn">中优先级</span><span>说明书</span><span class="chip warn">待确认</span><span class="chip neutral">待研发确认</span>
+    <span class="filter-exception" hidden>已定位到筛选条件外的意见</span></div>
+  <div class="issue-heading"><h3>开启阈值的等值动作待确认</h3></div><p class="issue-summary">示例：核对触发条件，保留待确认事实。</p>
+  <nav class="issue-jumps" aria-label="EX-01 小节"><a href="#original-EX-01">看原文</a><a href="#related-EX-01">看对应图证</a><a href="#conditions">看控制与工况</a><a href="#edit-EX-01">看修改位置</a><a href="#law-EX-01">看法律依据</a></nav>
+  
+  <div class="issue-reading">
+    <div class="original" id="original-EX-01" tabindex="-1"><h4>EX-01 原文与位置</h4><ul><li><span class="location">虚构说明书 [0018]</span><blockquote class="copy">照度低于 40 lx 时开启补光灯。</blockquote></li></ul></div>
+    <div class="finding"><h4>具体问题</h4><p class="copy">等值点没有明确动作；不能自行推断保持或关闭。</p></div>
+  </div>
+  <details class="related" id="related-EX-01" data-issue="EX-01" tabindex="-1"><summary>EX-01 对应图证 <span>1 条权项对照 · 0 条附图记录</span></summary><div class="related-content"><div class="issue-jumps"><a class="return-link" href="#issue-EX-01">返回摘要 ↑</a></div><div class="related-records" data-source="evidence"><h5>EX-01 权项对照</h5><p class="related-fallback"><a href="#evidence">查看完整权项对照</a></p></div><a class="return-link" href="#issue-EX-01">返回摘要 ↑</a></div></details><p class="print-evidence-links">EX-01 关联图证共 1 条权项对照 · 0 条附图记录。完整内容见“权利要求对照”和“附图与原图”中标有本意见编号的记录。</p>
+  <div class="edits" id="edit-EX-01" tabindex="-1">
+    <div class="section-head"><h4>EX-01 建议修改位置与改法</h4><a class="return-link" href="#issue-EX-01">返回摘要 ↑</a></div>
+    <ol><li><strong>虚构说明书 [0018]</strong><span class="sub">确认后补充动作</span><p class="stage-note"><b>当前稿件可考虑</b> 仅适用于此虚构申请前稿；新增技术事实须经研发确认。</p><p class="copy">确认后写出照度等于阈值时的实际动作。</p><p class="edit-detail"><b>采纳条件</b> 取得研发确认记录。</p><p class="edit-detail"><b>同步位置</b> 同步说明书、控制表与附图。</p></li></ol>
+    <a class="return-link" href="#reading-guide">补充阅读：意见和改法的使用说明</a>
+  </div>
+  <details class="legal" id="law-EX-01" tabindex="-1">
+    <summary>EX-01 法律依据与判断 <span class="chip neutral">撰写或保护层次问题</span></summary>
+    <div class="legal-body"><p class="copy">仅演示撰写问题记录，没有取得真实专利或适用法律材料，未作法律定性。</p>
+    <a class="return-link" href="#issue-EX-01">返回摘要 ↑</a></div>
+  </details>
+</article>
+<article class="issue" id="issue-EX-02" data-section="description" data-status="resolved" data-confirmation="none" data-priority="low" tabindex="-1">
+  <div class="issue-meta"><b>EX-02</b><span class="chip neutral">低优先级</span><span>说明书</span><span class="chip good">已解决</span>
+    <span class="filter-exception" hidden>已定位到筛选条件外的意见</span></div>
+  <div class="issue-heading"><h3>传感器的安装位置已统一</h3></div><p class="issue-summary">示例：按回改文本核对位置表达。</p>
+  <nav class="issue-jumps" aria-label="EX-02 小节"><a href="#original-EX-02">看原文</a><a href="#edit-EX-02">看修改位置</a><a href="#law-EX-02">看法律依据</a></nav>
+  
+  <div class="issue-reading">
+    <div class="original" id="original-EX-02" tabindex="-1"><h4>EX-02 原文与位置</h4><ul><li><span class="location">虚构说明书 [0019]</span><blockquote class="copy">光照传感器装在托盘旁。</blockquote></li></ul></div>
+    <div class="finding"><h4>具体问题</h4><p class="copy">示例记录原有位置名称不一致，回改后已按已确认方案统一。</p></div>
+  </div>
+  
+  <div class="edits" id="edit-EX-02" tabindex="-1">
+    <div class="section-head"><h4>EX-02 建议修改位置与改法</h4><a class="return-link" href="#issue-EX-02">返回摘要 ↑</a></div>
+    <ol><li><strong>虚构说明书 [0019]</strong><span class="sub">复核已统一的位置</span><p class="stage-note"><b>当前稿件可考虑</b> 仅适用于此虚构申请前稿；新增技术事实须经研发确认。</p><p class="copy">保留“装在托盘旁”的已确认表述。</p><p class="edit-detail"><b>采纳条件</b> 取得研发确认记录。</p><p class="edit-detail"><b>同步位置</b> 同步说明书、控制表与附图。</p></li></ol>
+    <a class="return-link" href="#reading-guide">补充阅读：意见和改法的使用说明</a>
+  </div>
+  <details class="legal" id="law-EX-02" tabindex="-1">
+    <summary>EX-02 法律依据与判断 <span class="chip neutral">撰写或保护层次问题</span></summary>
+    <div class="legal-body"><p class="copy">仅演示撰写问题记录，没有取得真实专利或适用法律材料，未作法律定性。</p>
+    <a class="return-link" href="#issue-EX-02">返回摘要 ↑</a></div>
+  </details>
+</article></div></section>
+<section id="evidence" class="section matrix" aria-labelledby="evidence-title"><h2 id="evidence-title">权利要求对照</h2><p class="intro">逐行保留权项原文、说明书位置、附图观察和支持判断。同一权项的不同分支分别记录。</p><div class="toolbar" hidden><label hidden>权利要求<select id="claim-filter"><option value="">全部权项</option><option value="权 1">权 1</option></select></label><label hidden>图示状态<select id="visual-filter"><option value="">全部图示状态</option><option value="missing">附图缺失</option></select></label><button id="reset-evidence" type="button">重置筛选</button><output id="evidence-count" aria-live="polite"></output></div><p class="empty filter-empty" id="evidence-empty" hidden>没有符合当前筛选条件的权项记录。</p><div class="table-wrap"><table role="table"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">权项与路径</th><th scope="col" role="columnheader">特征及原文</th><th scope="col" role="columnheader">说明书依据</th><th scope="col" role="columnheader">附图与支持判断</th><th scope="col" role="columnheader">关联意见</th></tr></thead><tbody role="rowgroup"><tr role="row" class="claim-group-start" data-claim="权 1" data-visual="missing" data-related="EX-01"><td role="cell"><span class="cell-label" aria-hidden="true">权项与路径</span><div><strong>权 1</strong><small>1</small></div></td><td role="cell"><span class="cell-label" aria-hidden="true">特征及原文</span><div><strong>照度控制</strong><blockquote><span class="copy">控制器根据光照传感器输出控制补光灯。</span></blockquote></div></td><td role="cell"><span class="cell-label" aria-hidden="true">说明书依据</span><div><span class="copy">虚构说明书 [0018]，仅写低于阈值的动作。</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">附图与支持判断</span><div><strong>图 1（未提供）</strong><small>示例无实际 PDF 页码</small><p class="copy">未提供图纸，不能确认图示关系。</p><span class="chip warn">附图缺失</span> <span class="chip warn">部分有依据</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">关联意见</span><div><a class="issue-link" href="#issue-EX-01">EX-01</a></div></td></tr></tbody></table></div></section>
+<section id="figures" class="section figure-table" aria-labelledby="figures-title"><h2 id="figures-title">附图与原图</h2><p class="intro">“图示可见”只表示下列观察已经核读；未在图中显示的事实另行核实。</p><div class="table-wrap"><p class="empty">本轮无逐图记录。请查看附图分项的覆盖说明。</p></div></section>
+<section id="conditions" class="section " aria-labelledby="conditions-title"><h2 id="conditions-title">控制与工况</h2><p class="copy">按触发条件、动作和后续状态核对；未公开的阈值和恢复条件须明确标注。</p><div class="table-wrap"><table role="table"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">工况</th><th scope="col" role="columnheader">触发、动作与后续状态</th><th scope="col" role="columnheader">原文位置与意见</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">工况</span><div>照度等于开启阈值</div></td><td role="cell"><span class="cell-label" aria-hidden="true">触发、动作与后续状态</span><div>原稿未明示动作，需确认进入前状态与后续动作。</div></td><td role="cell"><span class="cell-label" aria-hidden="true">原文位置与意见</span><div>虚构说明书 [0018]<p><a class="issue-link" href="#issue-EX-01">EX-01</a></p></div></td></tr></tbody></table></div></section>
+<section id="search" class="section search-table" aria-labelledby="search-title"><h2 id="search-title">现有技术</h2><p class="intro">记录检索范围与限制，再按独立权利要求分别说明证据和初检判断。</p><h3>独立权利要求的检索判断</h3><div class="table-wrap claim-search"><table role="table"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">独立权利要求</th><th scope="col" role="columnheader">检索来源及范围</th><th scope="col" role="columnheader">新颖性</th><th scope="col" role="columnheader">创造性</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">独立权利要求</span><div><strong>权 1</strong></div></td><td role="cell"><span class="cell-label" aria-hidden="true">检索来源及范围</span><div><span class="copy">虚构示例未进行任何实际检索。</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">新颖性</span><div><span class="chip neutral">未执行</span><p class="copy">未执行，不能判断。</p></div></td><td role="cell"><span class="cell-label" aria-hidden="true">创造性</span><div><span class="chip neutral">未执行</span><p class="copy">未执行，不能判断。</p></div></td></tr></tbody></table></div></section>
+<section id="delivery" class="section " aria-labelledby="delivery-title"><h2 id="delivery-title">范围与交付</h2><div class="coverage"><div class="coverage-row"><div><span class="section-link" data-coverage-section="disclosure">技术交底</span><small>虚构填写示例；用于展示该分项的记录方式。</small><small class="coverage-note">本分项未单列审核意见。</small></div><span class="chip good">已核查</span></div><div class="coverage-row"><div><span class="section-link" data-coverage-section="claims">权利要求</span><small>虚构填写示例；用于展示该分项的记录方式。</small><small class="coverage-note">本分项未单列审核意见。</small></div><span class="chip good">已核查</span></div><div class="coverage-row"><div><a class="section-link" href="#issues" data-filter-section="description">说明书</a><small>虚构填写示例；用于展示该分项的记录方式。</small></div><span class="chip good">已核查</span></div><div class="coverage-row"><div><span class="section-link" data-coverage-section="drawings">附图</span><small>虚构填写示例；未提供图纸。</small></div><span class="chip warn">待材料</span></div><div class="coverage-row"><div><span class="section-link" data-coverage-section="abstract">摘要</span><small>虚构填写示例；用于展示该分项的记录方式。</small><small class="coverage-note">本分项未单列审核意见。</small></div><span class="chip good">已核查</span></div><div class="coverage-row"><div><span class="section-link" data-coverage-section="filing">申请信息</span><small>虚构填写示例；用于展示该分项的记录方式。</small><small class="coverage-note">本分项未单列审核意见。</small></div><span class="chip good">已核查</span></div><div class="coverage-row"><div><span class="section-link" data-coverage-section="search">独权检索</span><small>虚构填写示例；未执行检索。</small></div><span class="chip warn">未核读</span></div></div><div class="table-wrap delivery-table"><table role="table"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">交付项</th><th scope="col" role="columnheader">文件交付</th><th scope="col" role="columnheader">人工复核</th><th scope="col" role="columnheader">说明</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">交付项</span><div>专利审核报告填写样板</div></td><td role="cell"><span class="cell-label" aria-hidden="true">文件交付</span><div><span class="chip good">已交付</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">人工复核</span><div>未作实际案件复核</div></td><td role="cell"><span class="cell-label" aria-hidden="true">说明</span><div><span class="copy">仅演示模板。</span></div></td></tr><tr role="row"><td role="cell"><span class="cell-label" aria-hidden="true">交付项</span><div>Word 双版本</div></td><td role="cell"><span class="cell-label" aria-hidden="true">文件交付</span><div><span class="chip neutral">本轮未要求</span></div></td><td role="cell"><span class="cell-label" aria-hidden="true">人工复核</span><div>不适用</div></td><td role="cell"><span class="cell-label" aria-hidden="true">说明</span><div><span class="copy">本次只演示 HTML。</span></div></td></tr></tbody></table></div></section>
+    <footer><span>专利审核报告 · 证据与程序限制见正文</span><a href="#overview">返回概览 ↑</a></footer>
+  </main>
+  <script>"use strict";
+
+const byId = (id) => document.getElementById(id);
+function hashTarget(hash) {
+  try { return byId(decodeURIComponent(hash.slice(1))); } catch { return null; }
+}
+const issueCards = Array.from(document.querySelectorAll("article.issue"));
+const evidenceRows = Array.from(document.querySelectorAll("tr[data-claim]"));
+const issueFields = ["issue-query", "section-filter", "issue-filter", "priority-filter", "confirmation-filter"].map(byId).filter(Boolean);
+const evidenceFields = ["claim-filter", "visual-filter"].map(byId);
+const searchable = new Map(issueCards.map(item => [item, item.textContent.toLowerCase()]));
+const sectionLinks = Array.from(document.querySelectorAll(".navigation a"));
+const sectionTargets = sectionLinks.map((link) => byId(link.hash.slice(1)));
+const navigation = document.querySelector(".navigation");
+function measureNavigation() {
+  const previousHeight = parseFloat(document.documentElement.style.getPropertyValue("--nav-height"));
+  const height = navigation.getBoundingClientRect().height;
+  const target = hashTarget(location.hash);
+  const aligned = target && Number.isFinite(previousHeight) &&
+    Math.abs(target.getBoundingClientRect().top - previousHeight - 18) < 2;
+  document.documentElement.style.setProperty("--nav-height", height + "px");
+  if (aligned && height !== previousHeight) target.scrollIntoView({ block: "start" });
+}
+measureNavigation();
+new ResizeObserver(measureNavigation).observe(navigation);
+let locatedIssue = null;
+
+const relatedIndex = {};
+for (const sectionId of ["evidence", "figures"]) {
+  const index = new Map();
+  for (const row of byId(sectionId).querySelectorAll("tr[data-related]")) {
+    for (const id of row.dataset.related.split(" ").filter(Boolean)) {
+      if (!index.has(id)) index.set(id, []);
+      index.get(id).push(row);
+    }
+  }
+  relatedIndex[sectionId] = index;
+}
+
+function populateRelated(panel) {
+  if (panel.dataset.loaded) return;
+  for (const record of panel.querySelectorAll(".related-records")) {
+    const rows = relatedIndex[record.dataset.source].get(panel.dataset.issue);
+    if (!rows?.length) continue;
+    const original = rows[0].closest("table");
+    const table = original.cloneNode(false);
+    table.classList.add("related-table");
+    const head = original.tHead.cloneNode(true);
+    head.rows[0].lastElementChild.remove();
+    table.append(head);
+    const body = table.createTBody();
+    body.setAttribute("role", "rowgroup");
+    for (const row of rows) {
+      const copy = body.insertRow();
+      copy.setAttribute("role", "row");
+      for (const cell of Array.from(row.cells).slice(0, -1)) copy.append(cell.cloneNode(true));
+    }
+    record.querySelector(".related-fallback").hidden = true;
+    record.append(table);
+  }
+  panel.dataset.loaded = "true";
+}
+
+function filter(items, predicate, prefix, noun) {
+  if (!items.length) return;
+  let count = 0;
+  for (const item of items) {
+    item.hidden = !predicate(item);
+    if (!item.hidden) count += 1;
+  }
+  byId(prefix + "-count").textContent = "显示 " + count + " / " + items.length + " " + noun;
+  byId(prefix + "-empty").hidden = count > 0;
+}
+
+function updateIssues() {
+  if (!issueCards.length) return;
+  const [query, section, status, priority, confirmation] = issueFields.map(field => field.value.trim().toLowerCase());
+  let matches = 0;
+  let exception = null;
+  for (const item of issueCards) {
+    const match = (!section || item.dataset.section === section) && (!status || item.dataset.status === status) &&
+      (!priority || item.dataset.priority === priority) && (!confirmation || item.dataset.confirmation === confirmation) &&
+      (!query || searchable.get(item).includes(query));
+    const outside = !match && item === locatedIssue;
+    item.hidden = !match && !outside;
+    item.querySelector(".filter-exception").hidden = !outside;
+    if (match) matches += 1;
+    if (outside) exception = item;
+  }
+  byId("issue-count").textContent = "匹配 " + matches + " / " + issueCards.length + " 条意见" +
+    (exception ? "，另显示定位项 " + exception.id.slice(6) : "");
+  byId("issue-empty").hidden = matches > 0 || Boolean(exception);
+}
+
+function updateEvidence() {
+  const [claim, visual] = evidenceFields.map((field) => field.value);
+  filter(evidenceRows, (row) => (!claim || row.dataset.claim === claim) &&
+    (!visual || row.dataset.visual === visual), "evidence", "条记录");
+}
+
+function reset(fields, update) {
+  for (const field of fields) field.value = "";
+  update();
+}
+
+function revealIssue(hash) {
+  measureNavigation();
+  const target = hashTarget(hash);
+  const issue = target?.closest("article.issue");
+  if (!target) return;
+  if (!issue) {
+    for (const panel of document.querySelectorAll("details")) {
+      if (panel === target || panel.contains(target)) panel.open = true;
+    }
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({ block: "start" });
+    return;
+  }
+  locatedIssue = issue;
+  updateIssues();
+  const panel = target.closest("details");
+  if (panel) {
+    panel.open = true;
+    if (panel.classList.contains("related")) populateRelated(panel);
+  }
+  for (const parent of document.querySelectorAll("details")) { if (parent.contains(target)) parent.open = true; }
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({ block: "start" });
+}
+
+function updateSection() {
+  const readingLine = navigation.getBoundingClientRect().bottom + 28;
+  let current = 0;
+  for (const [index, section] of sectionTargets.entries()) {
+    if (section.getBoundingClientRect().top <= readingLine) current = index;
+  }
+  const last = sectionTargets.length - 1;
+  if (window.scrollY > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2 &&
+      sectionTargets[last].getBoundingClientRect().top < window.innerHeight) {
+    current = last;
+  }
+  for (const [index, link] of sectionLinks.entries()) {
+    if (index === current) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  }
+}
+
+if (issueCards.length) {
+  byId("issues").querySelector(".toolbar").hidden = false;
+  for (const field of issueFields) field.addEventListener("input", () => {
+    locatedIssue = null;
+    updateIssues();
+  });
+  byId("reset-issues").addEventListener("click", () => {
+    locatedIssue = null;
+    reset(issueFields, updateIssues);
+  });
+}
+if (evidenceRows.length) {
+  byId("evidence").querySelector(".toolbar").hidden = false;
+  for (const field of evidenceFields) field.addEventListener("change", updateEvidence);
+  byId("reset-evidence").addEventListener("click", () => reset(evidenceFields, updateEvidence));
+}
+
+document.addEventListener("click", (event) => {
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest("a");
+  if (!link) return;
+  if (link.hash === "#reading-guide") {
+    const origin = link.closest(".edits");
+    const back = byId("guide-return");
+    if (origin && back) {
+      back.href = "#" + origin.id;
+      back.textContent = "返回 " + origin.id.slice(5) + " 的修改建议";
+      back.hidden = false;
+    }
+  }
+  if (link.dataset.filterSection && issueCards.length &&
+      Array.from(byId("section-filter").options).some(option => option.value === link.dataset.filterSection)) {
+    locatedIssue = null;
+    for (const field of issueFields) field.value = "";
+    byId("section-filter").value = link.dataset.filterSection;
+    updateIssues();
+  }
+  if (link.getAttribute("href")?.startsWith("#") && link.hash === location.hash) revealIssue(link.hash);
+});
+for (const panel of document.querySelectorAll("details.related")) {
+  panel.addEventListener("toggle", () => { if (panel.open) populateRelated(panel); });
+}
+window.addEventListener("hashchange", () => {
+  revealIssue(location.hash);
+  updateSection();
+});
+window.addEventListener("scroll", updateSection, { passive: true });
+window.addEventListener("resize", () => { measureNavigation(); updateSection(); });
+window.addEventListener("load", () => requestAnimationFrame(() => {
+  revealIssue(location.hash);
+  updateSection();
+}));
+updateIssues();
+updateEvidence();
+revealIssue(location.hash);
+updateSection();
+
+      let closedForPrint = null;
+      window.addEventListener('beforeprint', () => {
+        if (closedForPrint !== null) return;
+        closedForPrint = Array.from(document.querySelectorAll('details.review-extra:not([open]), details.legal:not([open])'));
+        closedForPrint.forEach(panel => { panel.open = true; });
+      });
+      window.addEventListener('afterprint', () => {
+        (closedForPrint || []).forEach(panel => { panel.open = false; });
+        closedForPrint = null;
+      });
+</script>
+</body>
+</html>
