@@ -30,7 +30,7 @@ class Document(HTMLParser):
 
 class ReportTests(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT / "examples/template-input.json").read_text(encoding="utf8"))
+        self.data = json.loads((ROOT / "tests/fixtures/legacy-input.json").read_text(encoding="utf8"))
         self.folder = tempfile.TemporaryDirectory()
         self.addCleanup(self.folder.cleanup)
         self.path = Path(self.folder.name)

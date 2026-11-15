@@ -30,6 +30,26 @@ const url = pathToFileURL(input).href;
     result.evidence=await page.locator('#evidence tr[data-claim]').count();
     result.figures=await page.locator('#figures tr[data-related]').count();
     result.images=await page.locator('#drawing-pages img').count();
+    result.amendments=await page.locator('article.amendment').count();
+    result.causalChains=await page.locator('article.causal-chain').count();
+    assert.ok(await page.locator('#causal-overview').isVisible(),'causal completion or gap notice');
+    assert.equal(await page.locator('.causal-chain').evaluateAll(nodes=>nodes.filter(n=>n.closest('details')).length),0,'causal evidence hidden in details');
+    for(const width of [1440,390]){
+      await page.setViewportSize({width,height:900});
+      if(result.causalChains){
+        await page.locator('nav a[href="#causal-review"]').click();
+        assert.ok(await page.locator('article.causal-chain').first().isVisible());
+        await shot(page,'causal-'+width);
+        const link=page.locator('article.causal-chain a[href^="#issue-"]').first();
+        if(await link.count()){
+          const target=await link.getAttribute('href'); await link.click();
+          assert.ok(await page.locator(target).isVisible(),'causal gap links to issue');
+        }
+      }
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'causal overflow');
+    }
+    await page.setViewportSize({width:1440,height:900}); await page.goto(url);
+    result.amendmentLinks=[];
     for (const img of await page.locator('#drawing-pages img').all()) {
       assert.ok(await img.evaluate(n=>n.complete && n.naturalWidth>0),'embedded image did not load');
     }
@@ -100,6 +120,31 @@ const url = pathToFileURL(input).href;
       }
       result.widths.push(width);
     }
+    // Test actual feature/source/return paths on each candidate, not just href existence.
+    for(const width of [1440,390]){
+      await page.setViewportSize({width,height:844});
+      for(const card of await page.locator('article.amendment').all()){
+        const id=await card.getAttribute('id');
+        const option=await card.getAttribute('data-option');
+        const links=card.locator('.table-wrap a[href^="#amendment-source-"]');
+        const count=await links.count();
+        if(!count) continue; // Unverified candidates can have no evidence yet.
+        for(const index of [...new Set([0,count-1])]){
+          const link=links.nth(index), hash=await link.getAttribute('href');
+          await link.click();
+          await page.waitForFunction(hash=>location.hash===hash && document.activeElement.id===hash.slice(1),hash);
+          const target=page.locator('[id="'+hash.slice(1)+'"]');
+          assert.ok(await target.isVisible(),'source not visible');
+          await page.waitForFunction(hash=>document.getElementById(hash.slice(1)).getBoundingClientRect().top>=document.querySelector('.navigation').getBoundingClientRect().bottom-1,hash);
+          await target.locator('a[href="#'+id+'"]').click();
+          await page.waitForFunction(id=>location.hash==='#'+id && document.activeElement.id===id,id);
+          assert.ok(await card.isVisible());
+          assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'candidate overflow');
+          result.amendmentLinks.push({option,width,source:hash,returned:true});
+        }
+        await shot(page,'candidate-'+option+'-'+width);
+      }
+    }
     await page.setViewportSize({width:390,height:844});
     await page.goto(url);
     await shot(page,'overview-390');
@@ -121,14 +166,41 @@ const url = pathToFileURL(input).href;
     const before=await page.locator('details').evaluateAll(nodes=>nodes.map(n=>n.open));
     await page.evaluate(()=>{dispatchEvent(new Event('beforeprint'));dispatchEvent(new Event('beforeprint'))});
     assert.equal(await page.locator('details.legal:not([open]), details.review-extra:not([open])').count(),0);
+    await page.emulateMedia({media:'print'});
+    assert.equal(await page.locator('.causal-chain:visible').count(),result.causalChains,'print causal records');
+    assert.ok(await page.locator('#causal-overview').isVisible(),'print causal notice');
+    for(const selector of ['article.amendment','.combination-basis','.amendment-sources','.claim-actions','.candidate-check']){
+      assert.equal(await page.locator(selector+':visible').count(),result.amendments,'print visibility: '+selector);
+    }
+    assert.equal(await page.locator('.combination-basis').evaluateAll(nodes=>nodes.filter(n=>n.closest('details')).length),0,'combination hidden in details');
     await page.pdf({path:path.join(destination,'print-check.pdf'),format:'A4',printBackground:true});
+    await page.emulateMedia({media:'screen'});
     await page.evaluate(()=>dispatchEvent(new Event('afterprint')));
     assert.deepEqual(await page.locator('details').evaluateAll(nodes=>nodes.map(n=>n.open)),before);
     // No-JS has readable body and native details, with filter controls hidden.
     const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
     const fallback=await nojs.newPage(); await fallback.goto(url);
+    assert.equal(await fallback.locator('.causal-chain:visible').count(),result.causalChains,'no-JS causal records');
+    assert.ok(await fallback.locator('#causal-overview').isVisible(),'no-JS causal notice');
     assert.equal(await fallback.locator('article.issue:visible').count(),result.issues);
     assert.equal(await fallback.locator('.toolbar:visible').count(),0);
+    for(const selector of ['article.amendment','.combination-basis','.amendment-sources','.claim-actions','.candidate-check']){
+      assert.equal(await fallback.locator(selector+':visible').count(),result.amendments,'no-JS visibility: '+selector);
+    }
+    if(result.amendments){
+      const card=fallback.locator('article.amendment').first(), id=await card.getAttribute('id');
+      const links=card.locator('.table-wrap a[href^="#amendment-source-"]');
+      if(await links.count()){
+        const hash=await links.first().getAttribute('href');
+        await links.first().click();
+        assert.equal(new URL(fallback.url()).hash,hash);
+        await fallback.locator('[id="'+hash.slice(1)+'"] a[href="#'+id+'"]').click();
+        assert.equal(new URL(fallback.url()).hash,'#'+id);
+      }
+    }
+    await fallback.emulateMedia({media:'print'});
+    assert.equal(await fallback.locator('.causal-chain:visible').count(),result.causalChains,'no-JS print causal records');
+    assert.equal(await fallback.locator('.combination-basis:visible').count(),result.amendments,'no-JS print evidence');
     if(await fallback.locator('#claim-overview').count()){
       await fallback.locator('#claim-overview summary').click();
       assert.equal(await fallback.locator('#claim-overview').getAttribute('open'),'');

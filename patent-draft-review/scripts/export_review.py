@@ -134,10 +134,12 @@ def compile_plan(plan, paragraphs):
             else:
                 added = edit["insert_after"]
                 if not isinstance(added, list) or not added or any(
-                    not isinstance(text, str) or not text.strip() or "\n" in text or "\r" in text
-                    for text in added
+                    not isinstance(text, str) or not text.strip() for text in added
                 ):
                     raise ValueError(f"{issue_id} 的 insert_after 必须含一个或多个非空段落")
+                for index, text in enumerate(added):
+                    if "\n" in text or "\r" in text:
+                        raise ValueError(f"{issue_id} 的 insert_after[{index}] 含换行，请按 Word 段落拆为有序数组，每个元素填一段文字")
                 if number in insertions:
                     raise ValueError(f"第 {number} 段有多项插入，请按顺序合并为一个 insert_after")
                 insertions[number] = added

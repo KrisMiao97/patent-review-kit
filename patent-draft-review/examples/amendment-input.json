@@ -1,0 +1,337 @@
+{
+  "schema_version": 3,
+  "title": "种苗箱三档候选格式（全部为虚构示例）",
+  "version": "虚构申请前稿 V1",
+  "stage": "申请前示例，无真实申请",
+  "phase": "before_filing",
+  "conclusion": "本示例演示怎样记录阈值边界和处理进度。它不对应真实专利，不能作为法律结论。",
+  "meta": [
+    {
+      "label": "报告用途",
+      "text": "填写与交互演示"
+    },
+    {
+      "label": "审阅立场",
+      "text": "申请人稿件自查"
+    },
+    {
+      "label": "法域",
+      "text": "示例未指定，未作法律定性"
+    }
+  ],
+  "reviewer": "示例未进行人工案件复核",
+  "actions": [
+    {
+      "issue": "EX-01",
+      "impact": "阈值等值动作",
+      "role": "控制研发",
+      "next": "确认等于阈值时的动作及恢复条件。"
+    }
+  ],
+  "gaps": [
+    {
+      "section": "drawings",
+      "note": "示例未提供原图，附图对应关系未核读。"
+    },
+    {
+      "section": "search",
+      "note": "示例未执行检索，不评价新颖性或创造性。"
+    }
+  ],
+  "coverage": [
+    {
+      "section": "disclosure",
+      "status": "reviewed",
+      "note": "虚构填写示例；用于展示该分项的记录方式。"
+    },
+    {
+      "section": "claims",
+      "status": "reviewed",
+      "note": "虚构填写示例；用于展示该分项的记录方式。"
+    },
+    {
+      "section": "description",
+      "status": "reviewed",
+      "note": "虚构填写示例；用于展示该分项的记录方式。"
+    },
+    {
+      "section": "drawings",
+      "status": "missing",
+      "note": "虚构填写示例；未提供图纸。"
+    },
+    {
+      "section": "abstract",
+      "status": "reviewed",
+      "note": "虚构填写示例；用于展示该分项的记录方式。"
+    },
+    {
+      "section": "filing",
+      "status": "reviewed",
+      "note": "虚构填写示例；用于展示该分项的记录方式。"
+    },
+    {
+      "section": "search",
+      "status": "unread",
+      "note": "虚构填写示例；未执行检索。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "EX-01",
+      "section": "description",
+      "title": "开启阈值的等值动作待确认",
+      "status": "pending",
+      "priority": "medium",
+      "summary": "示例：核对触发条件，保留待确认事实。",
+      "confirmation": "technical",
+      "problem": "等值点没有明确动作；不能自行推断保持或关闭。",
+      "originals": [
+        {
+          "location": "虚构说明书 [0018]",
+          "quote": "照度低于 40 lx 时开启补光灯。"
+        }
+      ],
+      "legal": {
+        "assessment": "drafting",
+        "reason": "仅演示撰写问题记录，没有取得真实专利或适用法律材料，未作法律定性。",
+        "sources": []
+      },
+      "edits": [
+        {
+          "location": "虚构说明书 [0018]",
+          "operation": "确认后补充动作",
+          "applicability": {
+            "kind": "current_draft",
+            "note": "仅适用于此虚构申请前稿；新增技术事实须经研发确认。"
+          },
+          "text": "确认后写出照度等于阈值时的实际动作。",
+          "condition": "取得研发确认记录。",
+          "sync": "同步说明书、控制表与附图。"
+        }
+      ]
+    },
+    {
+      "id": "EX-02",
+      "section": "description",
+      "title": "传感器的安装位置已统一",
+      "status": "resolved",
+      "priority": "low",
+      "summary": "示例：按回改文本核对位置表达。",
+      "confirmation": "none",
+      "problem": "示例记录原有位置名称不一致，回改后已按已确认方案统一。",
+      "originals": [
+        {
+          "location": "虚构说明书 [0019]",
+          "quote": "光照传感器装在托盘旁。"
+        }
+      ],
+      "legal": {
+        "assessment": "drafting",
+        "reason": "仅演示撰写问题记录，没有取得真实专利或适用法律材料，未作法律定性。",
+        "sources": []
+      },
+      "edits": [
+        {
+          "location": "虚构说明书 [0019]",
+          "operation": "复核已统一的位置",
+          "applicability": {
+            "kind": "current_draft",
+            "note": "仅适用于此虚构申请前稿；新增技术事实须经研发确认。"
+          },
+          "text": "保留“装在托盘旁”的已确认表述。",
+          "condition": "取得研发确认记录。",
+          "sync": "同步说明书、控制表与附图。"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "权 1",
+      "path": "1",
+      "feature": "照度控制",
+      "quote": "控制器根据光照传感器输出控制补光灯。",
+      "description": "虚构说明书 [0018]，仅写低于阈值的动作。",
+      "figure": "图 1（未提供）",
+      "page": "示例无实际 PDF 页码",
+      "visual_status": "missing",
+      "observation": "未提供图纸，不能确认图示关系。",
+      "support_status": "partial",
+      "issues": [
+        "EX-01"
+      ]
+    }
+  ],
+  "figures": [],
+  "search": [
+    {
+      "claim": "权 1",
+      "scope": "虚构示例未进行任何实际检索。",
+      "novelty": {
+        "status": "not_run",
+        "basis": "未执行，不能判断。"
+      },
+      "inventiveness": {
+        "status": "not_run",
+        "basis": "未执行，不能判断。"
+      }
+    }
+  ],
+  "deliverables": [
+    {
+      "name": "专利审核报告填写样板",
+      "status": "ready",
+      "review": "未作实际案件复核",
+      "note": "仅演示模板。"
+    },
+    {
+      "name": "Word 双版本",
+      "status": "not_requested",
+      "review": "不适用",
+      "note": "本次只演示 HTML。"
+    }
+  ],
+  "technology": [
+    "示例方案将光照传感器装在托盘旁、补光灯装在箱顶内侧。控制器读取照度，在低于阈值时打开补光灯；等值和恢复动作待确认。"
+  ],
+  "claim_index": [
+    {
+      "claim": "权 1",
+      "kind": "独立权利要求",
+      "path": "1",
+      "summary": "控制器根据照度控制箱顶补光灯。"
+    },
+    {
+      "claim": "权 2",
+      "kind": "从属权利要求，引用权 1",
+      "path": "1 → 2",
+      "summary": "传感器装在托盘旁。"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "照度等于开启阈值",
+      "behavior": "原稿未明示动作，需确认进入前状态与后续动作。",
+      "source": "虚构说明书 [0018]",
+      "issues": [
+        "EX-01"
+      ]
+    }
+  ],
+  "reading_guide": [
+    "本例附加的[0101]、[0102]为虚构教学文字，用于测试组合字段。实际材料必须从真实原文核对。"
+  ],
+  "amendment_options": [
+    {
+      "id": "D-01",
+      "tier": "fallback",
+      "title": "补光灯与托盘旁照度检测",
+      "target": "虚构候选从属项2",
+      "dependency": "2 → 1，继承箱体和控制器。",
+      "text": "2. 根据权利要求1所述的种苗箱，其特征在于，补光灯固定于顶盖内侧，照度传感器设置在托盘旁，控制器根据该传感器检测的照度控制补光灯。",
+      "scope_change": "限定补光灯及传感器的位置。",
+      "condition": "虚构格式演示，实际应用需真实原件。",
+      "sync": "核对正文、图示与继承项。",
+      "applicability": {
+        "kind": "current_draft",
+        "note": "仅虚构申请前格式演示。"
+      },
+      "issues": [
+        "EX-01"
+      ],
+      "sources": [
+        {
+          "id": "S1",
+          "kind": "description",
+          "location": "虚构[0101]",
+          "quote": "箱体内设有托盘，顶盖内侧固定补光灯，托盘旁设置照度传感器。",
+          "observation": "虚构文本明确同一箱体中的位置。",
+          "embodiment": "虚构实施例一",
+          "embodiment_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "S2",
+          "kind": "description",
+          "location": "虚构[0102]",
+          "quote": "在实施例一中，控制器根据该照度传感器的检测值控制上述补光灯。",
+          "observation": "虚构文本指回同一传感器与灯。",
+          "embodiment": "虚构实施例一",
+          "embodiment_ids": [
+            "E1"
+          ]
+        }
+      ],
+      "features": [
+        {
+          "id": "F1",
+          "text": "灯与传感器的位置",
+          "role": "新增",
+          "status": "supported",
+          "source_ids": [
+            "S1"
+          ],
+          "claim_source_ids": []
+        },
+        {
+          "id": "F2",
+          "text": "控制器根据同一传感器控制灯",
+          "role": "继承并明确",
+          "status": "supported",
+          "source_ids": [
+            "S2"
+          ],
+          "claim_source_ids": []
+        }
+      ],
+      "combination": {
+        "status": "supported",
+        "embodiment": "虚构实施例一",
+        "source_ids": [
+          "S1",
+          "S2"
+        ],
+        "reasoning": "虚构[0102]明确引用[0101]同一灯和传感器，构成位置与控制关系的组合。",
+        "omitted_features": "阈值具体数值未加入，示例仅演示位置与控制关系。",
+        "counterevidence": "真实阈值边界未核，本例不作法律结论。",
+        "figure_check": "本虚构例未提供原图，组合仅由虚构文字展示。",
+        "mode": "same_embodiment",
+        "embodiment_ids": [
+          "E1"
+        ],
+        "guidance_source_ids": []
+      },
+      "candidate_check": {
+        "kind": "dependent_claim",
+        "status": "complete",
+        "note": "仅为虚构模板，展示完整从属引用与新增限定的核对记录，不代表真实案件已经复核。"
+      },
+      "embodiments": [
+        {
+          "id": "E1",
+          "label": "虚构种苗箱实施例一"
+        }
+      ],
+      "embodiment_conflicts": [],
+      "scope_check": {
+        "effect": "narrowed",
+        "reason": "在虚构权1基础上加入灯和传感器的位置关系。",
+        "abandoned_coverage": "不覆盖灯不在顶盖内侧或传感器不在托盘旁的布置。",
+        "product_impact": "虚构示例，真实产品的安装位置需另行核实。"
+      },
+      "claim_actions": [
+        {
+          "target": "虚构原权1",
+          "action": "retain",
+          "reason": "保留较宽的箱体和控制器层次。"
+        },
+        {
+          "target": "虚构候选权2",
+          "action": "add",
+          "reason": "作为组合位置和控制关系的后备层次。"
+        }
+      ]
+    }
+  ]
+}

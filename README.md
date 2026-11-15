@@ -1,8 +1,16 @@
 # 专利审稿工具包
 
-[English](README.en.md) · [版本记录](CHANGELOG.md)
+[English](README.en.md) · [版本记录](CHANGELOG.md) · [WorkBuddy v0.6.1 下载](downloads/patent-draft-review-workbuddy-v0.6.1.zip)
 
 用一份可追溯的审核报告复核专利稿件、返稿和公开文本。适合申请人检查代理稿，也适合产品或研发团队从使用方立场梳理第三方专利的技术对应和证据缺口。
+
+**当前版本 v0.6.1。** 审稿逐项核对技术问题、方案如何起作用、效果在哪些条件下成立。关键依据缺失时，报告首页会提示需要补核的事项。
+
+## v0.6.1 更新
+
+- 已有权项对照、检索、速览或修改候选的报告，不能将技术因果核查标为“不适用”。速览或检索中的独立权利要求须有对应的因果记录。
+- 新增三项通用复核。核对实际输入是否保留判别信息，说明书能否指导选择可实施的方案组合，以及输出刻度能否对应实际效果精度。
+- 新版也纳入此前增加的技术因果记录、三档权项改法和实施例组合依据检查。升级与兼容说明见[版本记录](CHANGELOG.md)。
 
 ## 无需账号的合成演示
 
@@ -10,7 +18,7 @@
 
 [![虚构种苗箱审核报告实拍预览](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/)
 
-演示以虚构的种苗箱为例。照度低于阈值时开灯，恰好等于阈值时该怎样动作仍待确认。点击 **EX-01**，查看权项原文、工况依据和建议改法。再用「处理进度」筛选「已解决」，复核另一条意见怎样记录处理结果。
+演示以虚构的种苗箱为例。打开「技术因果核查」，可以查看起始状态、阈值等值动作和可支持的补光效果。点击首页的 **EX-01**，可核对原文位置、缺口及下一步。
 
 在浏览器打开即可交互，访客无需登录、API 密钥、安装或上传文件。需要离线浏览时，可下载仓库并打开 [`docs/index.html`](docs/index.html)。演示使用虚构数据，未执行实际检索。
 
@@ -20,6 +28,8 @@
 | --- | --- |
 | 申请前或返稿审查 | 按权项引用路径核对限定，逐条记录原文、证据、理由、改法与适用条件。 |
 | 使用方审阅公开文本 | 标明法域、文本版本和证据范围，结合产品技术事实定位待核问题。 |
+| 技术问题、方案与效果 | 逐项核对技术因果，记录条件和反例。在首页提示关键缺口。 |
+| 权项改法 | 说明保守澄清、平衡限定和收窄后备的范围取舍，核对实施例组合依据。 |
 | 工况与图文复核 | 核对阈值端点、动作和故障工况，关联权项、图号和原图。 |
 | 独立项检索 | 分开记录新颖性和创造性证据、实际检索范围及缺口。 |
 | 审稿交付 | 提供可筛选的离线 HTML。满足条件时，另出正文一致的 Word 批注版和清洁版。 |
@@ -30,7 +40,7 @@
 2. 提供待审文件、稿件版本、法域和程序阶段，以及已有附图或对比文献。
 3. 在对话中指定使用 `patent-draft-review`。需要 Word 时提供可编辑的 DOCX，并明确已采纳的修改。
 
-> 请用 patent-draft-review 审核这份申请前代理稿。逐条核对权利要求引用、说明书和附图，列出原文位置、证据、修改建议及采纳条件，交付离线 HTML 审核报告。
+> 请用 patent-draft-review 审核这份申请前代理稿。对照技术问题、权利要求、说明书和附图，列出作用条件、效果依据、证据缺口和修改建议，交付离线 HTML 审核报告。
 
 ## 本地复现演示
 
@@ -44,4 +54,4 @@ Word 导出依赖 `python-docx`，安装方式见 [requirements.txt](requirement
 
 ## WorkBuddy
 
-下载 [WorkBuddy v0.4.0 ZIP](downloads/patent-draft-review-workbuddy-v0.4.0.zip)。在 WorkBuddy「技能 → 添加技能 → 上传技能」中选择 ZIP，导入后可在对话中指定 `patent-draft-review`。 [WorkBuddy 官方导入说明](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market#%E4%B8%8A%E4%BC%A0%E6%8A%80%E8%83%BD)
+下载 [WorkBuddy v0.6.1 ZIP](downloads/patent-draft-review-workbuddy-v0.6.1.zip)。在 WorkBuddy「技能 → 添加技能 → 上传技能」中选择 ZIP，导入后可在对话中指定 `patent-draft-review`。 [WorkBuddy 官方导入说明](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market#%E4%B8%8A%E4%BC%A0%E6%8A%80%E8%83%BD)

@@ -7,7 +7,9 @@ import re
 from collections import Counter
 from pathlib import Path
 from string import Template
+from unicodedata import normalize
 from urllib.parse import quote, urlsplit
+from causal_review import validate_causal, causal_overview, causal_section
 
 
 SECTIONS = {
@@ -61,6 +63,14 @@ ISSUE_ID = re.compile(r"[A-Za-z][A-Za-z0-9._-]{0,47}\Z")
 MAX_INPUT = 2 * 1024 * 1024
 MAX_ROWS = 2000
 MAX_TEXT = 4000
+AMENDMENT_TIERS = {"clarify": "保守澄清", "balanced": "平衡限定", "fallback": "收窄后备"}
+BASIS_STATUS = {key: SUPPORT[key] for key in ("supported", "partial", "gap", "unverified")}
+SOURCE_KIND = {"description": "说明书", "drawing": "附图", "claim": "权利要求"}
+CANDIDATE_KIND = {"dependent_claim": "完整从属项", "independent_claim": "完整独立项", "wording": "局部措辞"}
+COMPLETENESS = {"complete": "已核对完整文字", "pending": "文字完整性待核"}
+SCOPE_EFFECT = {"unchanged": "未发现实质增减", "narrowed": "收窄", "broadened": "扩大", "uncertain": "范围变化待核"}
+COMBINATION_MODE = {"same_embodiment": "同一实施例", "explicit_combination": "跨实施例有组合指引", "unresolved": "实施例关系待核"}
+CLAIM_ACTION = {"retain": "保留", "replace": "替换", "add": "新增", "remove": "删除"}
 
 
 def unique_fields(pairs):
@@ -183,10 +193,10 @@ def validate_overview(data, issues):
 def validate(data):
     record(data, "report", ("title", "version", "stage", "conclusion"))
     version = data.get("schema_version", 1)
-    if type(version) is not int or version not in (1, 2, 3):
-        raise ValueError("schema_version 必须是 1、2 或 3，新报告请使用 3")
+    if type(version) is not int or version not in (1, 2, 3, 4):
+        raise ValueError("schema_version 必须是 1、2、3 或 4，新报告请使用 4 并完成因果必查")
     phase = None
-    if version == 3:
+    if version >= 3:
         phase = record(data, "report", choices={"phase": PHASES})["phase"]
     sections = []
     for item, path in rows(data, "coverage"):
@@ -203,14 +213,14 @@ def validate(data):
         if not ISSUE_ID.fullmatch(item["id"]):
             raise ValueError(f"{path}.id 必须以字母开头，使用不超过 48 位的字母、数字、点、下划线或连字符")
         issue_ids.append(item["id"])
-        if version == 3:
+        if version >= 3:
             record(item, path, ("summary",), {"confirmation": CONFIRMATION})
         if version >= 2:
             validate_issue_details(item, path, phase)
         issues.append(item if version >= 2 else legacy_issue(item, path))
     require_unique(issue_ids, "issues.id")
     issue_ids = set(issue_ids)
-    if version == 3:
+    if version >= 3:
         validate_overview(data, issues)
     for item, path in rows(data, "evidence"):
         record(item, path, ("claim", "path", "feature", "quote", "description", "figure", "page", "observation"),
@@ -493,7 +503,221 @@ def validate_extensions(data, issue_ids):
     for item, path in rows(data, "deliverables"):
         if "review" in item:
             record(item, path, ("review",))
+    validate_amendments(data, issue_ids)
+    validate_causal(data)
     return data
+
+
+def source_links(value, allowed, path):
+    if not isinstance(value, list) or len(value) > MAX_ROWS:
+        raise ValueError(f"{path} 必须是引用编号数组")
+    if any(not isinstance(item, str) or item not in allowed for item in value):
+        raise ValueError(f"{path} 含未定义的引用编号")
+    require_unique(value, path)
+
+
+def typed_sources(value, sources, path, kinds):
+    source_links(value, sources, path)
+    if any(sources[id]["kind"] not in kinds for id in value):
+        raise ValueError(f"{path} 的来源类型必须为 {' / '.join(SOURCE_KIND[kind] for kind in kinds)}")
+
+
+def validate_cross_guidance(selected, guidance_ids, sources, path):
+    if len(selected) < 2 or not guidance_ids:
+        raise ValueError(f"{path} 跨实施例须选择至少两个实施例，并提供明确组合指引")
+    neighbors = {id: set() for id in selected}
+    for source_id in guidance_ids:
+        guidance = sources[source_id].get("combination_guidance")
+        if guidance is None:
+            raise ValueError(f"{path} 来源 {source_id} 缺少明确连接的实施例及组合关系")
+        connected = guidance["embodiment_ids"]
+        if not set(connected).issubset(selected):
+            raise ValueError(f"{path} 来源 {source_id} 的组合指引涉及未选实施例")
+        first, *others = connected
+        neighbors[first].update(others)
+        for id in others:
+            neighbors[id].add(first)
+    pending = [next(iter(selected))]
+    reached = set(pending)
+    while pending:
+        new = neighbors[pending.pop()] - reached
+        reached.update(new)
+        pending.extend(new)
+    if reached != selected:
+        raise ValueError(f"{path} 组合指引未连接全部所选实施例")
+
+
+def validate_amendments(data, issue_ids):
+    if "amendment_options" not in data:
+        return
+    if data.get("schema_version") not in (3, 4):
+        raise ValueError("amendment_options 需要 schema_version 3 或 4 和已记录的程序阶段")
+    option_ids = []
+    for item, path in rows(data, "amendment_options"):
+        record(item, path, ("id", "title", "target", "dependency", "text", "scope_change", "condition", "sync"),
+               {"tier": AMENDMENT_TIERS})
+        if not ISSUE_ID.fullmatch(item["id"]):
+            raise ValueError(f"{path}.id 格式无效")
+        option_ids.append(item["id"])
+        check_links(item, path, issue_ids)
+        scope = record(item.get("applicability"), path + ".applicability", ("note",), {"kind": APPLICABILITY})
+        if scope["kind"] == "current_draft" and data["phase"] in ("granted", "unknown"):
+            raise ValueError(f"{path}.applicability 与程序阶段不匹配")
+        candidate = record(item.get("candidate_check"), path + ".candidate_check", ("note",),
+                           {"kind": CANDIDATE_KIND, "status": COMPLETENESS})
+        if candidate["status"] == "complete":
+            normalized_text = re.sub(r"^[\W_]+|[\W_]+$", "", normalize("NFKC", item["text"]).casefold())
+            if normalized_text in ("", "略", "待补", "tbd"):
+                raise ValueError(f"{path} 完整候选文字不能使用占位内容")
+        if item["tier"] == "fallback" and (candidate["kind"] == "wording" or candidate["status"] != "complete"):
+            raise ValueError(f"{path} 收窄后备必须填写并核对完整独立项或从属项")
+        scope_check = record(item.get("scope_check"), path + ".scope_check",
+                             ("reason", "abandoned_coverage", "product_impact"), {"effect": SCOPE_EFFECT})
+        if item["tier"] == "clarify" and scope_check["effect"] in ("narrowed", "broadened"):
+            raise ValueError(f"{path} 已确认实质增减限定，不能标为保守澄清")
+        actions = list(issue_rows(item, "claim_actions", path, ("target", "reason")))
+        for action, action_path in actions:
+            record(action, action_path, choices={"action": CLAIM_ACTION})
+        require_unique([action["target"] for action, _ in actions], path + ".claim_actions.target")
+        embodiments = list(issue_rows(item, "embodiments", path, ("id", "label"), False))
+        for embodiment, embodiment_path in embodiments:
+            if not ISSUE_ID.fullmatch(embodiment["id"]):
+                raise ValueError(f"{embodiment_path}.id 格式无效")
+        require_unique([entry["id"] for entry, _ in embodiments], path + ".embodiments.id")
+        embodiment_ids = {entry["id"] for entry, _ in embodiments}
+        conflicts = list(issue_rows(item, "embodiment_conflicts", path, ("left", "right", "reason"), False))
+        for conflict, conflict_path in conflicts:
+            source_links([conflict["left"], conflict["right"]], embodiment_ids, conflict_path)
+        require_unique([tuple(sorted((entry["left"], entry["right"]))) for entry, _ in conflicts],
+                       path + ".embodiment_conflicts")
+        sources = list(issue_rows(item, "sources", path, ("id", "location", "quote", "observation", "embodiment"), False))
+        for source, source_path in sources:
+            record(source, source_path, choices={"kind": SOURCE_KIND})
+            if not ISSUE_ID.fullmatch(source["id"]):
+                raise ValueError(f"{source_path}.id 格式无效")
+            source_links(source.get("embodiment_ids"), embodiment_ids, source_path + ".embodiment_ids")
+            if "combination_guidance" in source:
+                guidance_path = source_path + ".combination_guidance"
+                guidance = record(source["combination_guidance"], guidance_path, ("relation",))
+                source_links(guidance.get("embodiment_ids"), source["embodiment_ids"], guidance_path + ".embodiment_ids")
+                if source["kind"] == "claim" or len(guidance["embodiment_ids"]) < 2:
+                    raise ValueError(f"{guidance_path} 须由正文或附图明确连接至少两个实施例")
+        require_unique([source["id"] for source, _ in sources], path + ".sources.id")
+        source_by_id = {source["id"]: source for source, _ in sources}
+        features = list(issue_rows(item, "features", path, ("id", "text", "role")))
+        feature_sources = set()
+        for feature, feature_path in features:
+            record(feature, feature_path, choices={"status": BASIS_STATUS})
+            typed_sources(feature.get("source_ids"), source_by_id, feature_path + ".source_ids", ("description", "drawing"))
+            typed_sources(feature.get("claim_source_ids"), source_by_id, feature_path + ".claim_source_ids", ("claim",))
+            feature_sources.update(feature["source_ids"])
+            if feature["status"] == "supported" and not feature["source_ids"]:
+                raise ValueError(f"{feature_path} 标为有依据时必须填写对应说明书或附图来源")
+        require_unique([feature["id"] for feature, _ in features], path + ".features.id")
+        combo = record(item.get("combination"), path + ".combination",
+                       ("embodiment", "reasoning", "omitted_features", "counterevidence", "figure_check"),
+                       {"status": BASIS_STATUS, "mode": COMBINATION_MODE})
+        typed_sources(combo.get("source_ids"), source_by_id, path + ".combination.source_ids", ("description", "drawing"))
+        typed_sources(combo.get("guidance_source_ids"), source_by_id, path + ".combination.guidance_source_ids", ("description", "drawing"))
+        source_links(combo.get("embodiment_ids"), embodiment_ids, path + ".combination.embodiment_ids")
+        if not set(combo["guidance_source_ids"]).issubset(combo["source_ids"]):
+            raise ValueError(f"{path} 组合指引必须纳入组合来源")
+        if combo["status"] == "supported":
+            if any(feature["status"] != "supported" for feature, _ in features):
+                raise ValueError(f"{path} 组合有依据时逐特征依据仍有缺口")
+            if not feature_sources.issubset(combo["source_ids"]):
+                raise ValueError(f"{path} 组合依据未覆盖全部核查特征的来源")
+            selected = set(combo["embodiment_ids"])
+            if combo["mode"] == "unresolved" or not selected:
+                raise ValueError(f"{path} 实施例关系未核清，不能标为组合有依据")
+            if combo["mode"] == "same_embodiment" and len(selected) != 1:
+                raise ValueError(f"{path} 同一实施例模式须选择一个稳定实施例编号")
+            used = set()
+            for id in combo["source_ids"]:
+                memberships = selected.intersection(source_by_id[id]["embodiment_ids"])
+                if not memberships:
+                    raise ValueError(f"{path} 来源 {id} 未归属于所选实施例，不能标为组合有依据")
+                used.update(memberships)
+            if used != selected:
+                raise ValueError(f"{path} 所选实施例缺少组合来源")
+            if any({entry["left"], entry["right"]}.issubset(selected) for entry, _ in conflicts):
+                raise ValueError(f"{path} 所选实施例已记录互斥，不能标为组合有依据")
+            if combo["mode"] == "explicit_combination":
+                validate_cross_guidance(selected, combo["guidance_source_ids"], source_by_id, path)
+    require_unique(option_ids, "amendment_options.id")
+
+
+def amendment_anchor(option_id, source_id=None):
+    # Hex excludes hyphens: component boundaries and card/source types cannot collide.
+    encoded = option_id.encode("utf-8").hex()
+    if source_id is None:
+        return "amendment-card-" + encoded
+    return "amendment-source-" + encoded + "-" + source_id.encode("utf-8").hex()
+
+
+def amendment_section(items):
+    if not items:
+        return ""
+    cards = []
+    for item in items:
+        option_id = amendment_anchor(item["id"])
+        def basis_links(ids):
+            return " ".join(f'<a href="#{amendment_anchor(item["id"], id)}">{e(id)}</a>' for id in ids) or "未列来源"
+        feature_rows = [((e(feature["id"]), text_cell(feature["text"]), text_cell(feature["role"]),
+                          chip(feature["status"], BASIS_STATUS) + " 正文／图证 " + basis_links(feature["source_ids"])
+                          + ("<br>权项路径 " + basis_links(feature["claim_source_ids"]) if feature["claim_source_ids"] else "")), "")
+                        for feature in item["features"]]
+        sources = "".join(
+            f'<li id="{amendment_anchor(item["id"], source["id"])}" tabindex="-1">'
+            f'<strong>{e(source["id"])} · {SOURCE_KIND[source["kind"]]} · {e(source["location"])}</strong>'
+            f'<p class="sub">{e(", ".join(source["embodiment_ids"]) or "未归属实施例")} · {e(source["embodiment"])}</p><blockquote class="copy">{e(source["quote"])}</blockquote>'
+            f'<p class="copy">{e(source["observation"])}</p><a href="#{e(option_id)}">返回候选 ↑</a></li>'
+            for source in item["sources"])
+        combo = item["combination"]
+        guidance_links = ""
+        if combo["mode"] != "same_embodiment" or combo["guidance_source_ids"]:
+            source_by_id = {source["id"]: source for source in item["sources"]}
+            entries = []
+            for id in combo["guidance_source_ids"]:
+                guidance = source_by_id[id].get("combination_guidance")
+                relation = (f'{e("、".join(guidance["embodiment_ids"]))} · {e(guidance["relation"])}'
+                            if guidance else "具体组合关系待核")
+                entries.append(f'<li>{basis_links([id])} · {relation}</li>')
+            guidance_links = '<p><b>跨实施例指引</b></p><ul>' + "".join(entries) + '</ul>' if entries else '<p><b>跨实施例指引</b> 未列来源</p>'
+        candidate = item["candidate_check"]
+        scope = item["scope_check"]
+        actions = "".join(f'<li><b>{e(row["target"])} · {CLAIM_ACTION[row["action"]]}</b> {e(row["reason"])}</li>' for row in item["claim_actions"])
+        embodiment_text = "；".join(f'{row["id"]}：{row["label"]}' for row in item["embodiments"]) or "尚未定位实施例"
+        conflicts = "；".join(f'{row["left"]} / {row["right"]}：{row["reason"]}' for row in item["embodiment_conflicts"]) or "未记录互斥关系；仍需结合原件核查"
+        cards.append(
+            f'<article class="amendment" id="{e(option_id)}" data-option="{e(item["id"])}" tabindex="-1">'
+            f'<h3>{e(item["id"])} · {AMENDMENT_TIERS[item["tier"]]} · {e(item["title"])}</h3>'
+            f'{edit_scope(item, True)}<p class="copy"><b>修改落点</b> {e(item["target"])}</p>'
+            f'<p class="copy"><b>引用及累计路径</b> {e(item["dependency"])}</p>'
+            f'<blockquote class="candidate-text">{e(item["text"])}</blockquote>'
+            f'<p class="candidate-check"><b>{CANDIDATE_KIND[candidate["kind"]]} · {COMPLETENESS[candidate["status"]]}</b> {e(candidate["note"])}</p>'
+            f'<p class="copy"><b>范围变化</b> {e(item["scope_change"])}</p>'
+            f'<p class="copy"><b>{SCOPE_EFFECT[scope["effect"]]}</b> {e(scope["reason"])}</p>'
+            f'<p class="copy"><b>放弃覆盖</b> {e(scope["abandoned_coverage"])}</p>'
+            f'<p class="copy"><b>产品影响</b> {e(scope["product_impact"])}</p>'
+            f'<div class="claim-actions"><h4>采纳后的权项关系</h4><ul>{actions}</ul></div>'
+            f'<p class="copy"><b>采纳条件</b> {e(item["condition"])}</p>'
+            f'<p class="copy"><b>同步位置</b> {e(item["sync"])}</p>'
+            f'<p>关联意见 {issue_links(item["issues"])}</p><h4>逐特征依据</h4><div class="table-wrap">'
+            + table(("特征", "候选限定", "继承或修改", "依据及出处"), feature_rows, "") + '</div>'
+            f'<div class="combination-basis"><h4>实施例组合依据 {chip(combo["status"], BASIS_STATUS)}</h4>'
+            f'<p class="copy"><b>组合方式</b> {COMBINATION_MODE[combo["mode"]]} · {e(", ".join(combo["embodiment_ids"]) or "待核")}</p>'
+            f'<p class="copy"><b>实施例编号</b> {e(embodiment_text)}</p>'
+            f'<p class="copy"><b>实施例和状态</b> {e(combo["embodiment"])}</p>'
+            f'<p class="copy">{e(combo["reasoning"])}</p><p>组合来源 {basis_links(combo["source_ids"])}</p>'
+            + guidance_links +
+            f'<p class="copy"><b>互斥关系核对</b> {e(conflicts)}</p>'
+            f'<p class="copy"><b>附图核对</b> {e(combo["figure_check"])}</p>'
+            f'<p class="copy"><b>省略特征及理由</b> {e(combo["omitted_features"])}</p>'
+            f'<p class="copy"><b>冲突及未解决事项</b> {e(combo["counterevidence"])}</p></div>'
+            f'<h4>原文与图证</h4><ol class="amendment-sources">{sources}</ol></article>')
+    return section("amendments", "三档改法与组合依据",
+                   '<p class="intro">以下为待采纳的候选。逐特征出处和组合判断需一并核对，范围收窄后的专利性另按检索证据判断。</p>' + "".join(cards))
 
 
 def section(section_id, title, content, classes=""):
@@ -586,7 +810,7 @@ def render(data, folder, source_folder=None):
     coverage = {row["section"]: row for row in data["coverage"]}
     issues = sorted(data["issues"], key=lambda row: tuple(PRIORITY).index(row["priority"]))
     pending = [row for row in issues if row["status"] == "pending"]
-    structured = data.get("schema_version") == 3
+    structured = data.get("schema_version", 1) >= 3
     evidence_counts = Counter(id for row in data["evidence"] for id in row["issues"])
     figure_counts = Counter(id for row in data["figures"] for id in row["issues"])
     section_counts = Counter(row["section"] for row in issues)
@@ -618,13 +842,16 @@ def render(data, folder, source_folder=None):
     guide = details("reading-guide", "如何阅读意见和候选改法", paragraphs(guide_text) +
                     '<a class="return-link" id="guide-return" href="#overview" hidden>返回来源意见</a>', "overview-extra")
     overview = (f'<section id="overview" class="overview" aria-labelledby="overview-title"><div class="panel summary">'
-                f'<h2 id="overview-title">审核概览</h2>{conclusion}<div class="gaps"><div class="section-head">'
+                f'<h2 id="overview-title">审核概览</h2>{causal_overview(data)}{conclusion}<div class="gaps"><div class="section-head">'
                 '<h3>目前缺什么</h3><a href="#delivery">查看审核范围</a></div>'
                 f'<ul>{gaps_html or "<li>覆盖记录未标注待核缺口。</li>"}</ul></div></div>'
                 '<aside class="panel priority" aria-labelledby="priority-title"><h2 id="priority-title">优先待办</h2>'
                 '<p class="reading-note">按本轮建议处理顺序排列，编号用于关联证据。</p>'
                 f'<ul>{priority or "<li>本轮没有标记为待确认的意见。</li>"}</ul></aside>{guide}{claims}</section>')
     chapters = [("overview", "审核概览", overview)]
+    causal = causal_section(data)
+    if causal:
+        chapters.append(("causal-review", "技术因果核查", causal))
     technology = technology_section(data)
     if technology:
         chapters.append(("mechanism", "技术与路径", section("mechanism", "技术与路径", technology)))
@@ -642,6 +869,8 @@ def render(data, folder, source_folder=None):
                      '<p class="empty filter-empty" id="issue-empty" hidden>没有符合当前筛选条件的意见，请调整条件。</p>' +
                      f'<div class="issue-list">{cards or "<p class=empty>本轮未单列审核意见，请查看覆盖范围与限制。</p>"}</div>')
     chapters.append(("issues", "审核意见", section("issues", "审核意见", issue_content)))
+    if data.get("amendment_options"):
+        chapters.append(("amendments", "三档改法", amendment_section(data["amendment_options"])))
     evidence_filters = '<div class="toolbar" hidden>'
     claim_names = dict.fromkeys(row["claim"] for row in data["evidence"])
     evidence_filters += filter_control("claim-filter", "权利要求", "全部权项", {name: name for name in claim_names}, claim_names)
