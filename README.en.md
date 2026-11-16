@@ -1,57 +1,57 @@
 # Patent Review Kit
 
-[简体中文](README.md) · [Changelog](CHANGELOG.md) · [Download WorkBuddy v0.6.1](downloads/patent-draft-review-workbuddy-v0.6.1.zip)
+[简体中文](README.md) · [Changelog](CHANGELOG.md)
 
-Review patent drafts, revised submissions, and published texts in one traceable report. Applicants can review drafting decisions. Product and R&D teams can map technical features and identify evidence gaps when reading a third-party patent.
+Review a patent draft before filing. Check the claims against the specification and drawings, then share actionable feedback with the drafter. Each issue includes source locations, evidence gaps, a proposed edit, and conditions for adopting it.
 
-**Current version v0.6.1.** Trace what technical problem each claim addresses, how its features act on the cause, and what the evidence supports under the stated conditions. The report surfaces critical gaps in its overview.
+**[Open the interactive report (Chinese)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)** · **[Download the fictional draft and drawing (Chinese)](docs/seedling-box-example.zip)** · **[Install the skill](#install-and-try)**
 
-## What's new in v0.6.1
+## Try the sample draft
 
-- A report with claim records cannot mark causal review as inapplicable. Independent claims listed in the claim index or search records must have corresponding causal records.
-- Three additional checks cover whether the actual input preserves the required information, whether the disclosure guides the choice of a workable combination, and whether the evidence supports the claimed precision.
-- This public update also includes the causal review workflow, three levels of claim amendment options, and checks for combining features across embodiments. See the [changelog](CHANGELOG.md) for upgrade details.
+The fictional seedling box turns on a lamp below 40 lux and turns it off above 40 lux. What happens at exactly 40 lux? Figure 1 shows the placement and connections of the components. The specification and engineering records determine how the controller acts.
 
-## Account-free synthetic demo
+1. Download and extract the archive. Give the assistant both `draft.md` and `figure-1.png`, keeping them together. You can also [read the draft on GitHub](patent-draft-review/examples/seedling-box/draft.md).
+2. Send this prompt to an assistant with the skill installed.
 
-**[Open the interactive report (Chinese)](https://krismiao97.github.io/patent-review-kit/)** · [Inspect the synthetic input](patent-draft-review/examples/template-input.json)
+   > Use patent-draft-review to review this pre-filing seedling-box draft. Check the claims, specification, and Figure 1. Cite the missing operating conditions, the exact source text, what engineering needs to confirm, and edits conditional on that confirmation. Limit the review to the provided materials and deliver an offline HTML report.
 
-[![Screenshot of the fictional seedling chamber review report](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/)
+3. Compare your result with [EX-01 in the expected report](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01). Check whether it identifies the equality case at exactly 40 lux and the default lamp state from power-up to the first valid reading, and distinguishes visible connections from unresolved control behavior.
 
-The fictional seedling chamber turns its lamp on below a light threshold. Open the causal review section to see how the report treats the initial state, the exact threshold, and the lighting effect. Follow **EX-01** from the overview to the cited text, evidence gap, and next step.
+[![Source excerpt, threshold issue, and conditions for applying an edit](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)
 
-The demo runs in your browser without a sign-in, API key, installation, or file upload. For offline use, download the repository and open [`docs/index.html`](docs/index.html). The demo uses fictional data and records no prior-art search.
+The public demo requires no account or file upload. The materials are fictional and the sample review is limited to the supplied draft.
 
-## What the review delivers
+## Install and try
+
+| Assistant | Installation |
+| --- | --- |
+| Codex | Run the command below in your project directory. The Skills CLI requires Node.js 22.20 or later. |
+| WorkBuddy | Download [the v0.6.1 import ZIP](downloads/patent-draft-review-workbuddy-v0.6.1.zip). In WorkBuddy, open Skills → Add Skill → Upload Skill and select the ZIP. |
+| Other Agent Skills hosts | Follow the host's instructions to import the full [`patent-draft-review/`](patent-draft-review/) directory. |
+
+```sh
+npx skills add https://github.com/KrisMiao97/patent-review-kit --skill patent-draft-review --agent codex --copy
+```
+
+The assistant environment needs Python 3.10+ to render the HTML report. For your own draft, provide the file, document version, jurisdiction, procedural stage, and available drawings or prior art. For annotated and clean Word copies, provide an editable DOCX and identify the accepted edits. [WorkBuddy import guide](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)
+
+## What the skill delivers
 
 | Use case | Output |
 | --- | --- |
-| Draft or revision review | Claim dependency paths, source excerpts, supporting evidence, reasons, and conditional edits. |
-| Third-party patent review | Jurisdiction, document version, evidence limits, and open questions about product correspondence. |
-| Technical problem, solution, and effect | A causal review with conditions, counterexamples, and critical gaps surfaced in the overview. |
-| Claim amendment options | Three levels of amendment with scope trade-offs and evidence for combining features. |
-| Drawings and operating conditions | Cross-references to claims and drawings, including threshold endpoints, state changes, and exceptions. |
-| Independent claim searches | Separate novelty and inventive-step evidence, actual search scope, and gaps. |
-| Report delivery | A filterable offline HTML report, plus optional annotated and clean Word copies when the source and review decisions are ready. |
+| Draft or revision review | Claim dependency paths, claim support in the specification, drawing references, and proposed edits. |
+| Technical problem, solution, and effect | How the mechanism works, the conditions for its effects, and priority evidence gaps. |
+| Claim amendment options | Conservative clarifications, balanced limitations, and narrower fallbacks with scope trade-offs. |
+| Third-party patent review | Document version, jurisdiction, evidence coverage, and open questions about product correspondence. |
+| Independent claim searches | Separate novelty and inventive-step search records, evidence, and coverage gaps. |
+| Report delivery | Filterable offline HTML with evidence links and embedded drawings, and optional Word copies when source and decisions are ready. |
 
-## Get started
+## Rebuild the sample report
 
-1. Copy [`patent-draft-review/`](patent-draft-review/) to your assistant’s skill directory. Keep the internal folder structure.
-2. Provide the draft or publication, version, jurisdiction, procedural stage, and any drawings or prior-art material.
-3. Ask the assistant to use `patent-draft-review`. For Word output, provide an editable DOCX and specify which changes you have accepted.
-
-> Use patent-draft-review to review this pre-filing draft. Trace the technical problem, claim language, specification, and drawings. Include source locations, conditions for the claimed effects, evidence gaps, and proposed edits in an offline HTML report.
-
-## Rebuild the demo locally
-
-Run from the repository root with Python 3.10+. The HTML renderer uses the standard library.
+Run from the repository root. The HTML renderer uses Python 3.10+ and its standard library.
 
 ```sh
-python patent-draft-review/scripts/render_review.py patent-draft-review/examples/template-input.json --output demo-local.html
+python patent-draft-review/scripts/render_review.py patent-draft-review/examples/seedling-box/review.json --output demo-local.html
 ```
 
-Word export requires `python-docx`. See [requirements.txt](requirements.txt), the [Word export guide](patent-draft-review/references/word-output.md), the [report design specification](patent-draft-review/DESIGN.md), and the [template schema](patent-draft-review/references/template-schema.md).
-
-## WorkBuddy
-
-Download the [WorkBuddy v0.6.1 ZIP](downloads/patent-draft-review-workbuddy-v0.6.1.zip). Import it through Skills → Add Skill → Upload Skill, then invoke `patent-draft-review` in a task. [WorkBuddy upload guide](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)
+Current skill version is v0.6.1. See [requirements.txt](requirements.txt), the [Word export guide](patent-draft-review/references/word-output.md), and the [template schema](patent-draft-review/references/template-schema.md) for details.

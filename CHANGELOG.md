@@ -1,3 +1,9 @@
+# GitHub 试用入口 · 2026-11-16
+
+新增可下载的虚构种苗箱样稿、图 1 和可逐条对照的预期报告。双语首页集中展示试用和安装方式，Skill 描述补充申请前审稿、返稿复核与说明书支持等触发词。
+
+Added a downloadable fictional seedling-box draft, Figure 1, and an evidence-linked expected report. The bilingual README now surfaces the sample and installation, and the skill description names specific draft-review tasks.
+
 # v0.6.1 · 2026-11-15
 
 本次公开更新从 v0.4.0 升至 v0.6.1，纳入中间版本已实现的因果核查与权项修改候选功能。

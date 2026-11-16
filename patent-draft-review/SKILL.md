@@ -1,6 +1,6 @@
 ---
 name: patent-draft-review
-description: "从申请人或使用方立场审阅专利申请稿、返稿及公开或授权文本。先核对法域、程序和文本版本，将技术问题、方案与效果的因果对应设为必查项，再核查权项路径、图文、工况及独立项检索证据。交付带筛选、证据跳转和内嵌原图的离线专利审核报告；输出设计规范与模板统一维护，可按需导出 Word 批注版和清洁版。"
+description: "收到专利代理稿要审稿、复核返稿、检查权利要求的说明书支持、核对图文一致性或判断技术效果是否有依据时使用。支持申请人审阅申请前稿，也支持使用方审阅公开或授权文本。核查权项引用、附图、工况和独立项检索证据，输出可追溯的离线 HTML 审核报告，可按需导出 Word 批注版和清洁版。Use for pre-filing patent draft review, revision review, claim support, claim dependencies, drawing consistency, or technical evidence gaps."
 metadata:
   version: "0.6.1"
 ---
