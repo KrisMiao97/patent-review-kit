@@ -19,7 +19,7 @@
 
 [![预期报告中的原文位置、等值问题与修改条件](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)
 
-公开试用页无需账号或上传文件即可查看成品。试用材料为虚构示例，审稿范围限于所给稿件。
+[公开试用页](https://krismiao97.github.io/patent-review-kit/)汇总样稿、安装方式和交互报告，无需账号或上传文件即可查看。试用材料为虚构示例，审稿范围限于所给稿件。
 
 ## 安装与试用
 

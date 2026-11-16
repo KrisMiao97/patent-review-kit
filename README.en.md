@@ -19,7 +19,7 @@ The fictional seedling box turns on a lamp below 40 lux and turns it off above 4
 
 [![Source excerpt, threshold issue, and conditions for applying an edit](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)
 
-The public demo requires no account or file upload. The materials are fictional and the sample review is limited to the supplied draft.
+The [public trial page](https://krismiao97.github.io/patent-review-kit/) brings together the draft, installation, and interactive report. It requires no account or file upload. The materials are fictional and the sample review is limited to the supplied draft.
 
 ## Install and try
 
