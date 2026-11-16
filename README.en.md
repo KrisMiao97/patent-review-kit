@@ -4,11 +4,11 @@
 
 Review a patent draft before filing. Check the claims against the specification and drawings, then share actionable feedback with the drafter. Each issue includes source locations, evidence gaps, a proposed edit, and conditions for adopting it.
 
-**[Open the interactive report (Chinese)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)** · **[Download the fictional draft and drawing (Chinese)](docs/seedling-box-example.zip)** · **[Install the skill](#install-and-try)**
+**[Read the 40 lx example in English](https://krismiao97.github.io/patent-review-kit/#example-en)** · **[Download the fictional draft and drawing (Chinese)](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/seedling-box-example.zip)** · **[Install the skill](#install-and-try)**
 
 ## Try the sample draft
 
-The fictional seedling box turns on a lamp below 40 lux and turns it off above 40 lux. What happens at exactly 40 lux? Figure 1 shows the placement and connections of the components. The specification and engineering records determine how the controller acts.
+The fictional draft describes a lamp that turns on below 40 lx and turns off above 40 lx. What happens at exactly 40 lx? Figure 1 shows the placement and connections of the components. Use the specification and engineering records to verify the controller's behavior at the threshold and during power-up.
 
 1. Download and extract the archive. Give the assistant both `draft.md` and `figure-1.png`, keeping them together. You can also [read the draft on GitHub](patent-draft-review/examples/seedling-box/draft.md).
 2. Send this prompt to an assistant with the skill installed.
@@ -26,7 +26,7 @@ The [public trial page](https://krismiao97.github.io/patent-review-kit/) brings 
 | Assistant | Installation |
 | --- | --- |
 | Codex | Run the command below in your project directory. The Skills CLI requires Node.js 22.20 or later. |
-| WorkBuddy | Download [the v0.6.1 import ZIP](downloads/patent-draft-review-workbuddy-v0.6.1.zip). In WorkBuddy, open Skills → Add Skill → Upload Skill and select the ZIP. |
+| WorkBuddy | Download [the v0.6.1 import ZIP](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/patent-draft-review-workbuddy-v0.6.1.zip). In WorkBuddy, open Skills → Add Skill → Upload Skill and select the ZIP. |
 | Other Agent Skills hosts | Follow the host's instructions to import the full [`patent-draft-review/`](patent-draft-review/) directory. |
 
 ```sh

@@ -1,11 +1,13 @@
 ---
 name: patent-draft-review
-description: "收到专利代理稿要审稿、复核返稿、检查权利要求的说明书支持、核对图文一致性或判断技术效果是否有依据时使用。支持申请人审阅申请前稿，也支持使用方审阅公开或授权文本。核查权项引用、附图、工况和独立项检索证据，输出可追溯的离线 HTML 审核报告，可按需导出 Word 批注版和清洁版。Use for pre-filing patent draft review, revision review, claim support, claim dependencies, drawing consistency, or technical evidence gaps."
+description: "专利审稿。适用于申请前审代理稿、复核返稿、检查说明书支持、图文一致性和技术效果依据，也支持使用方审阅公开或授权文本。核查权项引用、工况和独立项检索证据，交付可追溯的离线 HTML 审稿报告，可按需导出 Word 批注版和清洁版。 Pre-filing patent review for applicants and in-house IP teams. Use to review draft and revised patent applications, check claim support in the specification and drawings, and document technical evidence gaps."
 metadata:
   version: "0.6.1"
 ---
 
 # 专利审稿
+
+用虚构种苗箱样稿、附图和带原文证据的示例报告试审一次。[打开公开试用页](https://krismiao97.github.io/patent-review-kit/) · [40 lx example in English](https://krismiao97.github.io/patent-review-kit/#example-en)
 
 用 [审稿与证据](references/review-method.md) 审核明确版本的申请材料。每次功能性审稿必读并执行 [技术因果必查](references/causal-review.md)，在润色和候选改写前完成问题及权项清单、逐条因果对应和缺证据意见。涉及附图、尺寸、控制条件或备选路径时读 [图文与工况核对](references/technical-review.md)。组织交付时读 [专利审核报告](references/report-output.md) 与 [输出设计规范](DESIGN.md)，模板扩展字段见 [数据与组件](references/template-schema.md)。要求 Word 时另读 [Word 双版本](references/word-output.md)。
 

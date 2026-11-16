@@ -4,7 +4,7 @@
 
 收到专利代理稿后，逐条核对权利要求、说明书和附图，生成一份可以反馈给代理师的审稿意见。每条意见标明原文位置、证据缺口、建议改法和采纳条件。
 
-**[看交互报告](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)** · **[下载虚构样稿和附图](docs/seedling-box-example.zip)** · **[安装 Skill](#安装与试用)**
+**[看交互报告](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)** · **[下载虚构样稿和附图](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/seedling-box-example.zip)** · **[安装 Skill](#安装与试用)**
 
 ## 拿一份样稿试审
 
@@ -19,14 +19,14 @@
 
 [![预期报告中的原文位置、等值问题与修改条件](docs/preview.png)](https://krismiao97.github.io/patent-review-kit/report.html#issue-EX-01)
 
-[公开试用页](https://krismiao97.github.io/patent-review-kit/)汇总样稿、安装方式和交互报告，无需账号或上传文件即可查看。试用材料为虚构示例，审稿范围限于所给稿件。
+公开试用页汇总样稿、安装方式和交互报告，无需账号或上传文件即可查看。试用材料为虚构示例，审稿范围限于所给稿件。[公开试用页](https://krismiao97.github.io/patent-review-kit/) · [40 lx 英文示例](https://krismiao97.github.io/patent-review-kit/#example-en)
 
 ## 安装与试用
 
 | 助手 | 安装方式 |
 | --- | --- |
 | Codex | 在要试用的项目目录运行下方命令。Skills CLI 需要 Node.js 22.20 或更新版本。 |
-| WorkBuddy | 下载 [v0.6.1 导入包](downloads/patent-draft-review-workbuddy-v0.6.1.zip)，在「技能 → 添加技能 → 上传技能」中选择 ZIP。 |
+| WorkBuddy | 下载 [v0.6.1 导入包](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/patent-draft-review-workbuddy-v0.6.1.zip)，在「技能 → 添加技能 → 上传技能」中选择 ZIP。 |
 | 其他支持 Agent Skills 的助手 | 按助手的安装说明导入完整的 [`patent-draft-review/`](patent-draft-review/) 目录。 |
 
 ```sh

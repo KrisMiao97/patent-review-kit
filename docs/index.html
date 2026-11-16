@@ -6,7 +6,7 @@
   <meta name="description" content="用虚构种苗箱样稿试用专利审稿工具包。核对权利要求、说明书和附图，并查看带证据与改法的离线审核报告。">
   <title>试审种苗箱样稿｜专利审稿工具包</title>
   <script>
-    if (location.hash && location.hash !== '#install') {
+    if (location.hash && !['#install', '#example-en'].includes(location.hash)) {
       location.replace('report.html' + location.hash);
     }
   </script>
@@ -41,12 +41,20 @@
     .card a{width:fit-content}
     pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--blue);color:var(--ink);border-radius:7px;padding:10px 12px;font:13px/1.55 "IBM Plex Mono",Consolas,monospace}
     .prompt{margin:0;border-inline-start:3px solid #83b8cb;padding-inline-start:12px}
+    .example{margin:0 0 24px}
+    .example dl{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr);gap:10px 18px;margin:4px 0}
+    .example dt{font-weight:700}
+    .example dd{margin:0;color:var(--muted)}
+    .example dd p+p{margin-top:8px}
+    .example .actions{margin-top:4px}
     footer{border-top:1px solid var(--line);padding:15px 0 25px;font-size:.92rem}
     @media(max-width:760px){
       main,footer,.top{width:min(100% - 28px,1080px)}
       .hero,.steps{grid-template-columns:1fr}
       .hero{padding:25px 0 20px;gap:14px}
       .top{font-size:.94rem}
+      .example dl{grid-template-columns:1fr;gap:4px}
+      .example dd+dt{margin-top:8px}
     }
   </style>
 </head>
@@ -64,7 +72,7 @@
         <p>收到代理稿后，逐条核对权利要求、说明书和附图，形成可以反馈给代理师的意见。先用虚构案例走一遍。</p>
         <div class="actions">
           <a class="button primary" href="report.html#issue-EX-01">看交互报告</a>
-          <a class="button" href="seedling-box-example.zip" download>下载样稿和附图</a>
+          <a class="button" href="https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/seedling-box-example.zip">下载样稿和附图</a>
           <a class="button" href="#install">安装 Skill</a>
         </div>
       </section>
@@ -72,6 +80,7 @@
         <h2 id="case-title">照度刚好是 40 lx，补光灯怎么动作？</h2>
         <p>虚构的种苗箱在低于 40 lx 时开灯，高于 40 lx 时关灯。图 1 画出了补光灯、光照传感器和控制器的连接。灯在等值点和首次上电时怎么动作，需要核对控制逻辑。</p>
         <a href="report.html#issue-EX-01">在报告里看原文、图证和改法</a>
+        <a href="#example-en" lang="en">40 lx example in English</a>
       </section>
     </div>
     <div class="steps">
@@ -81,7 +90,7 @@
         <p>在试用项目目录执行。需要 Node.js 22.20 或更新版本。</p>
         <pre><code>npx skills add https://github.com/KrisMiao97/patent-review-kit --skill patent-draft-review --agent codex --copy</code></pre>
         <h3>WorkBuddy</h3>
-        <p><a href="https://raw.githubusercontent.com/KrisMiao97/patent-review-kit/main/downloads/patent-draft-review-workbuddy-v0.6.1.zip">下载导入包</a>，在「技能 → 添加技能 → 上传技能」中选择 ZIP。</p>
+        <p><a href="https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/patent-draft-review-workbuddy-v0.6.1.zip">下载导入包</a>，在「技能 → 添加技能 → 上传技能」中选择 ZIP。</p>
       </section>
       <section class="card" aria-labelledby="try-title">
         <h2 id="try-title">在助手里试审</h2>
@@ -91,6 +100,27 @@
         <a href="report.html#issue-EX-01">对照预期意见 EX-01</a>
       </section>
     </div>
+    <section class="card example" id="example-en" lang="en" aria-labelledby="example-en-title">
+      <h2 id="example-en-title">What happens at exactly 40 lx?</h2>
+      <p>This review note comes from a fictional pre-filing draft for a seedling box.</p>
+      <dl>
+        <dt>Draft [0018]</dt>
+        <dd>“The supplemental lamp turns on when illuminance is below 40 lx. The lamp turns off when illuminance is above 40 lx.” (English translation)</dd>
+        <dt>Evidence gap</dt>
+        <dd>Paragraph [0018] leaves out the lamp state at exactly 40 lx and the default state between power-up and the first valid reading. Figure 1 shows the signal path from the sensor through the controller to the lamp. The control logic still needs confirmation from engineering.</dd>
+        <dt>Conditional edits</dt>
+        <dd>
+          <p>Confirm the behavior with engineering before choosing one of these edits to [0018]. Both examples assume the lamp stays off from power-up until the first valid reading.</p>
+          <p><strong>If the lamp retains its state at 40 lx,</strong> add the confirmed power-up rule and “At exactly 40 lx, the lamp retains its previous state.”</p>
+          <p><strong>If the lamp switches off at 40 lx,</strong> change the shutoff condition to “The lamp turns off when illuminance is at least 40 lx” and add the confirmed power-up rule.</p>
+        </dd>
+      </dl>
+      <div class="actions">
+        <a class="button primary" href="report.html#issue-EX-01">Open the full report (Chinese)</a>
+        <a class="button" href="https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/seedling-box-example.zip">Download the sample (Chinese)</a>
+        <a class="button" href="#install">Install the skill</a>
+      </div>
+    </section>
   </main>
   <footer><p>样稿和报告为虚构示例。查看演示无需登录或上传文件。</p></footer>
 </body>
