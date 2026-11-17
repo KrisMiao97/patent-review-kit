@@ -26,7 +26,7 @@
 | 助手 | 安装方式 |
 | --- | --- |
 | Codex | 在要试用的项目目录运行下方命令。Skills CLI 需要 Node.js 22.20 或更新版本。 |
-| WorkBuddy | 下载 [v0.6.1 导入包](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/patent-draft-review-workbuddy-v0.6.1.zip)，在「技能 → 添加技能 → 上传技能」中选择 ZIP。 |
+| WorkBuddy | [在 WorkBuddy 打开专利审稿技能](https://www.workbuddy.cn/share/asset?shareCode=jtohFwwevZecQASf8oE3B6&sig=U4wRdfvbRACI8WNf)。 |
 | 其他支持 Agent Skills 的助手 | 按助手的安装说明导入完整的 [`patent-draft-review/`](patent-draft-review/) 目录。 |
 
 ```sh

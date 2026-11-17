@@ -2,11 +2,11 @@
 
 - Skill 详情加入公开试用入口，描述补充申请前专利审稿的英文表述。
 - 公开试用页新增 40 lx 英文示例，展示说明书原句、缺失工况及经研发确认后可采用的改法。
-- v0.6.1 Release 提供 WorkBuddy 导入包和种苗箱样稿与附图的直链下载，双语 README 与试用页使用同一组附件。
+- v0.6.1 Release 提供种苗箱样稿和附图的直链下载。WorkBuddy 用户可以[打开专利审稿技能分享页](https://www.workbuddy.cn/share/asset?shareCode=jtohFwwevZecQASf8oE3B6&sig=U4wRdfvbRACI8WNf)。
 
 - Added public trial links to the skill and clarified the pre-filing review use case in its description.
 - Added an English 40 lx review note with the source passage, the evidence gap, and an edit conditional on engineering confirmation.
-- The v0.6.1 release provides direct downloads for the WorkBuddy import ZIP and the fictional draft with its drawing.
+- The v0.6.1 release provides a direct download for the fictional draft and drawing. WorkBuddy users can [open the shared skill](https://www.workbuddy.cn/share/asset?shareCode=jtohFwwevZecQASf8oE3B6&sig=U4wRdfvbRACI8WNf).
 
 # GitHub 试用入口 · 2026-11-16
 

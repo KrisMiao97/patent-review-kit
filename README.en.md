@@ -26,7 +26,7 @@ The [public trial page](https://krismiao97.github.io/patent-review-kit/) brings 
 | Assistant | Installation |
 | --- | --- |
 | Codex | Run the command below in your project directory. The Skills CLI requires Node.js 22.20 or later. |
-| WorkBuddy | Download [the v0.6.1 import ZIP](https://github.com/KrisMiao97/patent-review-kit/releases/download/v0.6.1/patent-draft-review-workbuddy-v0.6.1.zip). In WorkBuddy, open Skills → Add Skill → Upload Skill and select the ZIP. |
+| WorkBuddy | [Open Patent Draft Review in WorkBuddy](https://www.workbuddy.cn/share/asset?shareCode=jtohFwwevZecQASf8oE3B6&sig=U4wRdfvbRACI8WNf). |
 | Other Agent Skills hosts | Follow the host's instructions to import the full [`patent-draft-review/`](patent-draft-review/) directory. |
 
 ```sh
