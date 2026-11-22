@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>定位柱固定在哪里？ · 结构稿试审</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f6f0;color:#203b37;font:16px/1.7 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1000px;margin:auto;padding:32px 24px}a,summary{color:#115e52}header{border-top:5px solid #24685c;padding-top:16px}small,figcaption{color:#536b61}h1{font-size:clamp(32px,5vw,58px);line-height:1.18;letter-spacing:-.04em;margin:14px 0}h2{font-size:1.25rem}p{margin:6px 0 14px}.grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;margin:22px 0}article,figure,details{background:white;border:1px solid #cdd8ce;border-radius:14px;padding:20px;margin:0}figure{background:#edf3ea}blockquote{margin:8px 0 16px;border-left:3px solid #aaa081;padding-left:12px}svg{display:block;width:100%;height:auto}svg text{font:14px system-ui,sans-serif;fill:#233d38}svg .label{font-weight:bold}svg .moving{transition:transform .35s ease}svg.open .moving{transform:translateY(-42px)}button{font:inherit;padding:5px 15px;border-radius:25px;background:white;color:#1b5145;border:1px solid #709082;cursor:pointer}button[aria-pressed=true]{background:#215f52;color:white}details{margin:12px 0}summary{font-weight:bold;cursor:pointer}details h3{font-size:1rem;margin-bottom:2px}figcaption{font-size:.85rem}.state{font-size:.92rem;min-height:2.9em}nav{margin-bottom:15px}button:focus-visible,summary:focus-visible{outline:3px solid #ab611f}@media(max-width:680px){main{padding:18px 12px}.grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){svg .moving{transition:none}}
+</style></head><body><main><nav><a href="./index.html">← 专利审稿试用页</a></nav><header><small>专利审稿 × 专利产品三维图解　/　虚构结构稿练习</small>
+<h1>提起盒盖，定位柱跟谁走？</h1><p>一份可拆盖收纳盒的申请稿，把定位柱的固定位置写进了权利要求。对照三段原文和图 1，找出需要研发确认的那一处连接关系。</p></header>
+<div class="grid"><article><h2>申请稿摘录</h2><small>权利要求 1（节选）</small><blockquote>一种收纳盒，包括盒体（1）、盒盖（2）和定位柱（3），所述定位柱固定于盒体。</blockquote>
+<small>说明书 [0012]</small><blockquote>定位柱（3）与盒体（1）固定。盒盖（2）向上移开时，定位柱留在盒体上。</blockquote>
+<small>附图说明 [0006]</small><blockquote>图 1 为盒盖从盒体提起后的装配关系示意图。</blockquote>
+<p>先读图。哪一处固定面支承定位柱？如果按图装配，开盖后定位柱会留在哪里？</p></article>
+<figure><figcaption>虚构附图 1 · 根据练习稿附图绘制的轴测示意</figcaption>
+<svg id="diagram" class="open" viewBox="0 0 410 285" role="img" aria-labelledby="figtitle desc"><title id="figtitle">盒盖、盒体和定位柱的结构关系</title><desc id="desc">图中定位柱上端与盒盖下表面固定。提盖后柱随盖升起，盒体上的孔露出。</desc>
+<g fill="#cad9ca" stroke="#467367" stroke-width="2"><path d="M48 188l114-41 114 36-115 46z" fill="#e3eade"/><path d="M48 188l113 41v36L48 225z"/><path d="M161 229l115-46v35l-115 47z" fill="#97afa2"/></g>
+<ellipse cx="147" cy="191" rx="14" ry="5" fill="#345d52"/><path d="M257 218h34" stroke="#456b60"/><text x="296" y="224">1 盒体</text>
+<g class="moving"><g fill="#c58045" stroke="#774a31" stroke-width="2"><path d="M137 154v37q9 7 20 0v-37z"/><ellipse cx="147" cy="154" rx="10" ry="4" fill="#d8a16e"/></g>
+<g stroke="#386f61" stroke-width="2"><path d="M51 136l111-39 111 35-111 43z" fill="#86b4a1"/><path d="M51 136l111 39v11L51 148z" fill="#659884"/><path d="M162 175l111-43v12l-111 42z" fill="#538575"/></g>
+<path d="M246 147h48m-147 39l-37 12H73" fill="none" stroke="#53695c"/><text x="298" y="151">2 盒盖</text><text x="8" y="204">3 定位柱</text></g></svg>
+<div role="group" aria-label="观察图示动作"><button id="lift" aria-pressed="true">提盖观察</button> <button id="seat" aria-pressed="false">靠近装配位置</button></div><p class="state" id="status" aria-live="polite">图示位置：定位柱与盒盖一起升起，盒体上的配合孔露出。</p></figure></div>
+<details><summary>展开参考审稿意见</summary><h3>对不上的是定位柱的固定对象</h3><p>权利要求 1 和说明书 [0012] 都把定位柱固定在盒体上。图 1 却把柱画在盒盖下方，提起时随盖移动，盒体上留下配合孔。两种装配方式对应不同的配合件，仅凭这份稿件无法判定实际产品采用哪一种。</p>
+<h3>给研发的一个问题</h3><p>请用装配图或实物开盖照片确认：盒盖提起后，定位柱留在盒体，还是随盒盖一起移动？同时指出另一部件上配合孔的位置。</p>
+<h3>确认后再改稿</h3><p>若定位柱固定在盒体上，按实际结构重画图 1，将柱留在盒体、配合孔标在盖上，并复核引线。若定位柱固定在盖上，应对照核实的结构，同步调整权利要求 1 的固定对象和说明书 [0012] 的开盖动作，再复核图号。此处练习针对申请前草稿。</p></details>
+<p><small>本练习中的文本、零件编号和附图均为教学虚构。图示动作呈现图 1 的一种明确装配关系，实际项目应回到研发资料核实。</small></p></main>
+<script>
+const diagram=document.querySelector('#diagram');
+function setLifted(lifted){
+  diagram.classList.toggle('open',lifted);
+  document.querySelector('#lift').setAttribute('aria-pressed',String(lifted));
+  document.querySelector('#seat').setAttribute('aria-pressed',String(!lifted));
+  document.querySelector('#status').textContent=lifted?'图示位置：定位柱与盒盖一起升起，盒体上的配合孔露出。':'靠近装配位置：柱的下端对准盒体上的孔，上端仍固定在盒盖下方。';
+}
+document.querySelector('#lift').onclick=()=>setLifted(true);
+document.querySelector('#seat').onclick=()=>setLifted(false);
+</script></body></html>

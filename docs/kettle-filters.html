@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>两种水壶滤件怎样取出 · 专利产品三维图解</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f7ef;color:#1b3634;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1120px;margin:auto;padding:40px 24px}header{border-top:5px solid #175a55;padding-top:16px}small,.meta{font-size:.85rem;color:#425d58}h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.14;letter-spacing:-.04em;margin:12px 0}p{margin:8px 0}h2{font-size:1.35rem;margin:4px 0}section.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:22px}article,.controls{background:#fff;border:1px solid #cad6cd;border-radius:14px;padding:18px}canvas{display:block;width:100%;height:auto;aspect-ratio:1.52;background:#eef4ef;border-radius:8px;margin:12px 0;touch-action:pan-y;cursor:grab}canvas:focus-visible{outline:3px solid #764518}.controls{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}button{font:inherit;color:#124c47;background:white;border:1px solid #74958e;border-radius:30px;padding:6px 15px;cursor:pointer}button[aria-pressed=true]{color:white;background:#155d55}.angle{display:flex;gap:8px;align-items:center}.angle input{max-width:26vw;accent-color:#175a55}.key{display:inline-block;width:.8em;height:.8em;border-radius:2px;margin-right:4px}.state{min-height:3.3em}a{color:#075e54;text-underline-offset:3px}.sources{margin:22px 0;font-size:.94rem}summary{cursor:pointer;font-weight:650}.note{font-size:.88rem}button:focus-visible,input:focus-visible{outline:3px solid #b86125}@media(max-width:700px){main{padding:20px 12px}section.grid{grid-template-columns:1fr}article{padding:13px}.state{min-height:0}}
+</style>
+</head>
+<body><main><header><small>研发罗盘水壶案例　/　专利产品三维图解</small>
+<h1>取出滤件，要先开盖吗？</h1><p>切换到“取出时”，比较两种结构中哪些部件会跟着移动。模型只保留壶嘴附近的关键部件，尺寸和操作行程均为示意。</p></header>
+<div class="controls" aria-label="同步控制"><strong>同时观察</strong><button id="closed" aria-pressed="true">工作位置</button><button id="open" aria-pressed="false">取出时</button><label class="angle">转动视角 <input id="angle" type="range" min="-160" max="160" value="150" aria-label="同步转动两个模型的角度"></label></div>
+<section class="grid"><article><small>US5672274A · 图 2、3、4A–4B</small><h2>从壶嘴上方抽出滤件</h2><canvas id="us" width="760" height="500" tabindex="0" aria-label="壶嘴固定框架与可抽出滤件的局部三维示意，左右方向键旋转">滤件沿固定框架的槽向上抽出。</canvas><p><i class="key" style="background:#cd7638"></i>滤件 44　<i class="key" style="background:#23645d"></i>固定连接框架 46</p><p class="state" id="us-caption" aria-live="polite"></p><a href="https://patentimages.storage.googleapis.com/5e/6a/87/d830815951b129/US5672274.pdf#page=4">查看专利剖视图 3 ↗</a></article>
+<article><small>EP0676161A1 · 图 2、9、11</small><h2>提起壶盖，滤件随盖移开</h2><canvas id="ep" width="760" height="500" tabindex="0" aria-label="压配式壶盖与盖载滤件的局部三维示意，左右方向键旋转">壶盖提起时滤件随盖脱离壶内壁。</canvas><p><i class="key" style="background:#cd7638"></i>滤件 14　<i class="key" style="background:#23645d"></i>壶盖 3</p><p class="state" id="ep-caption" aria-live="polite"></p><a href="https://patentimages.storage.googleapis.com/54/2b/18/0fc0cdc6603a21/EP0676161A1.pdf#page=6">查看公开说明书附图 ↗</a></article></section>
+<p class="note">浅灰轮廓表示对应壶体的局部参考边界。左右拖动任一模型可同步旋转；也可使用视角滑块或方向键。</p>
+<details class="sources"><summary>查看动作依据和建模范围</summary><p>美国专利的滤件 44 插入框架 46 两侧的槽 78，底部凸起 58 扣住框架。握住顶缘 54 上拉，凸起越过止挡后滤件可取出。模型省略卡扣弹性变形。<a href="https://patents.google.com/patent/US5672274A/en">权利要求 1、4、11–13 及说明书</a></p><p>欧洲公开文本所示的压配式壶盖 3 通过盖下凹部 27 支承滤件 14。闭盖时滤件周缘贴合壶嘴附近内壁；提盖时滤件随盖脱离。画面停在滤件仍装在盖上的位置。模型省略压配变形和取盖所需的力。<a href="https://patents.google.com/patent/EP0676161A1/en">权利要求 1、7–9、11 及说明书</a></p><p>两栏分别对应两份专利实施例。示意图用于比较支承位置和取件动作，壶身轮廓、网格与色彩经过简化；清洗效果和使用寿命需要另行验证。</p></details>
+<noscript>启用 JavaScript 可查看可旋转模型。两件专利的动作和依据也可在上方文字中阅读。</noscript></main>
+<script>
+const slider = document.querySelector('#angle');
+const canvases = [...document.querySelectorAll('canvas')];
+const palettes = {frame:['#387e73','#1d554f','#83ada2'],filter:['#e69b56','#a9572b','#ffcd89'],mesh:['#ebb97f','#ae6f36','#f5d5a8']};
+let opened = false;
+function render(canvas) {
+  const ctx = canvas.getContext('2d');
+  const angle = Number(slider.value) * Math.PI / 180;
+  const sin = Math.sin(angle), cos = Math.cos(angle);
+  const scale = 1.68;
+  const shapes = [];
+  function project([x,y,z]) {
+    const depth = x*sin + z*cos;
+    return [380 + scale*(x*cos-z*sin), 322-scale*(y*.94+depth*.34),depth*.94-y*.34];
+  }
+  function face(vertices,fill) {
+    const p=vertices.map(project);
+    shapes.push({p,fill,depth:p.reduce((sum,v)=>sum+v[2],0)/p.length});
+  }
+  function box(x,y,z,w,h,d,material) {
+    const points=[[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z],[x,y,z+d],[x+w,y,z+d],[x+w,y+h,z+d],[x,y+h,z+d]];
+    const colors=palettes[material];
+    [[0,1,2,3],[4,7,6,5],[0,3,7,4],[1,5,6,2],[2,6,7,3],[0,4,5,1]].forEach((ids,i)=>face(ids.map(j=>points[j]),colors[i<2?0:i<4?1:2]));
+  }
+  function wire(vertices) {
+    ctx.beginPath();
+    vertices.forEach((v,i)=>{const [x,y]=project(v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
+    ctx.stroke();
+  }
+  function ring(y,rx,rz,frontExtension) {
+    return Array.from({length:65},(_,i)=>{const a=i*Math.PI/32;const nose=Math.pow(Math.max(0,Math.cos(a)),14);return [rx*Math.sin(a),y,rz*Math.cos(a)+frontExtension*nose]});
+  }
+  ctx.clearRect(0,0,760,500);
+  ctx.strokeStyle='#91aca3';ctx.lineWidth=2.2;
+  wire(ring(13,87,79,36));wire(ring(-87,73,67,0));
+  // Section through the spout: outer lip, sloping wall and filter seat.
+  for(const side of [-1,1])wire([[side*29,13,83],[side*16,15,108],[side*9,-11,91],[side*19,-48,67]]);
+  for(const x of [-1,1])wire([[x*87,13,0],[x*73,-87,0]]);
+  const us=canvas.id==='us';
+  const shift=opened?95:0, z=61;
+  if(us) {
+    box(-28,-62,z-8,5,83,10,'frame');box(23,-62,z-8,5,83,10,'frame');
+    box(-28,-63,z-8,56,7,10,'frame');
+    box(-28,15,z-28,56,5,22,'frame');
+  } else {
+    const lid=ring(29+shift,80,71,0).slice(0,64);
+    const lower=lid.map(([x,y,z])=>[x,y-6,z]);
+    lid.forEach((v,i)=>{const j=(i+1)%lid.length;face([v,lid[j],lower[j],lower[i]],'#37756c')});
+    face(lid,'#86afa2');
+    box(-28,12+shift,z-8,56,12,9,'frame');
+  }
+  const y=-55+shift, width=us?46:56;
+  for(let x=-width/2+3;x<width/2;x+=5)box(x,y,z,1,71,1,'mesh');
+  for(let row=3;row<71;row+=6)box(-width/2,y+row,z,width,1,1,'mesh');
+  box(-width/2-2,y,z-1,4,73,4,'filter');box(width/2-2,y,z-1,4,73,4,'filter');
+  box(-width/2,y,z-1,width,4,4,'filter');box(-width/2,y+69,z-1,width,5,4,'filter');
+  if(us){for(const row of [23,46])box(-width/2,y+row,z-1,width,3,4,'filter');box(-width/2-2,y+73,z-2,width+4,4,14,'filter')}
+  else box(-2,y,z-1,4,71,4,'filter');
+  shapes.sort((a,b)=>b.depth-a.depth);
+  for(const shape of shapes){
+    ctx.fillStyle=shape.fill;ctx.beginPath();
+    shape.p.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fill();
+  }
+}
+function update(){
+  canvases.forEach(render);
+  document.querySelector('#closed').setAttribute('aria-pressed',String(!opened));
+  document.querySelector('#open').setAttribute('aria-pressed',String(opened));
+  document.querySelector('#us-caption').textContent=opened?'滤件从壶嘴上方抽出。连接框架仍固定在壶体上，其他部件保持原位。':'滤件两侧插入连接框架的槽内，顶缘露在壶嘴上方。';
+  document.querySelector('#ep-caption').textContent=opened?'提起压配式壶盖后，滤件随盖离开壶嘴内壁，仍由盖支承。':'壶盖压合在壶体上。盖下的滤件周缘贴合壶嘴附近内壁。';
+}
+document.querySelector('#closed').onclick=()=>{opened=false;update()};
+document.querySelector('#open').onclick=()=>{opened=true;update()};
+slider.oninput=update;
+for(const canvas of canvases){
+  let drag;
+  canvas.onpointerdown=e=>{drag={x:e.clientX,angle:Number(slider.value)};canvas.setPointerCapture(e.pointerId)};
+  canvas.onpointermove=e=>{if(drag){slider.value=String(drag.angle+(e.clientX-drag.x)*.7);update()}};
+  canvas.onlostpointercapture=()=>{drag=null};
+  canvas.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();slider.value=String(Number(slider.value)+(e.key==='ArrowLeft'?-8:8));update()}};
+}
+update();
+</script></body></html>
