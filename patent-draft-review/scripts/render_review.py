@@ -10,6 +10,7 @@ from string import Template
 from unicodedata import normalize
 from urllib.parse import quote, urlsplit
 from causal_review import validate_causal, causal_overview, causal_section
+from figure_priority_review import validate_figure_priority
 
 
 SECTIONS = {
@@ -193,8 +194,8 @@ def validate_overview(data, issues):
 def validate(data):
     record(data, "report", ("title", "version", "stage", "conclusion"))
     version = data.get("schema_version", 1)
-    if type(version) is not int or version not in (1, 2, 3, 4):
-        raise ValueError("schema_version 必须是 1、2、3 或 4，新报告请使用 4 并完成因果必查")
+    if type(version) is not int or version not in (1, 2, 3, 4, 5):
+        raise ValueError("schema_version 必须是 1 至 5，新报告使用 5")
     phase = None
     if version >= 3:
         phase = record(data, "report", choices={"phase": PHASES})["phase"]
@@ -249,6 +250,8 @@ def validate(data):
                 raise ValueError(f"{path}.file 仅用于已交付的同目录 DOCX 文件名")
         deliveries.append(item["name"])
     require_unique(deliveries, "deliverables.name")
+    if version >= 5:
+        validate_figure_priority(data)
     return validate_extensions({**data, "issues": issues}, issue_ids)
 
 
@@ -337,6 +340,49 @@ def search_table(search):
                  "本轮无独立项检索记录。请查看独权检索分项的覆盖说明。")
 
 
+def search_evidence_details(search):
+    disclosure = {"disclosed": "已公开", "not_disclosed": "核读范围内未公开", "unverified": "待核"}
+    combinations = {"complete": "同一方案完整公开", "incomplete": "未公开完整组合", "unverified": "组合待核"}
+    combination_basis = {"supported": "有结合依据", "unsupported": "本轮缺乏结合依据", "not_needed": "无区别特征"}
+    sections = []
+    for item in search:
+        if "features" not in item:
+            continue
+        features = {row["id"]: row for row in item["features"]}
+        content = f'<h3>{e(item["claim"])} · 逐特征现有技术证据</h3>'
+        content += '<div class="table-wrap">' + table(("特征", "权项原文及位置"), [
+            ((e(row["id"]), text_cell(row["text"] + "\n" + row["claim_location"])), "")
+            for row in features.values()], "") + '</div>'
+        for comparison in item["comparisons"]:
+            content += f'<h4>{e(comparison["id"])} · <a href="#ref-{e(comparison["reference_id"])}">{e(comparison["reference_id"])}</a> · {e(comparison["scheme"])}</h4>'
+            content += paragraphs([comparison["eligibility"]])
+            records = []
+            for row in comparison["features"]:
+                evidence = "\n".join(row[key] for key in ("location", "quote", "checked_scope") if row.get(key))
+                records.append(((e(row["feature_id"]), e(disclosure[row["status"]]),
+                                 text_cell(evidence), text_cell(row["reason"])), ""))
+            content += '<div class="table-wrap">' + table(("特征", "公开状态", "文献位置及核读范围", "对应或未公开理由"), records, "") + '</div>'
+            combination = comparison["combination"]
+            content += paragraphs([combinations[combination["status"]], combination.get("location", ""), combination["reason"]])
+        judgment = item["novelty"]
+        if judgment["status"] == "reviewed":
+            content += paragraphs(["新颖性组合核对结果", "已发现单篇完整组合" if judgment["result"] == "complete_combination_found" else "本轮文献方案中未发现完整组合"])
+        judgment = item["inventiveness"]
+        if judgment["status"] == "reviewed":
+            content += '<h4>区别特征与结合依据</h4>'
+            content += paragraphs(["起点方案 " + judgment["starting_comparison_id"],
+                                   "区别特征 " + ("、".join(judgment["difference_ids"]) or "无"),
+                                   "区别带来的效果 " + judgment["effect"],
+                                   "实际技术问题 " + judgment["technical_problem"]])
+            combination = judgment["combination"]
+            content += paragraphs([combination_basis[combination["status"]], combination["reason"], combination.get("checked_scope", "")])
+            for row in combination["evidence"]:
+                content += paragraphs(["结合证据 " + row["comparison_id"] + " · " + "、".join(row["feature_ids"]),
+                                       row["location"], row["quote"], row["reason"]])
+        sections.append(content)
+    return "".join(sections)
+
+
 def original_items(originals):
     locations = {}
     for original in originals:
@@ -415,6 +461,9 @@ def issue_card(item, structured, evidence_count, figure_count, references=None, 
                   '完整内容见“权利要求对照”和“附图与原图”中标有本意见编号的记录。</p>') if related else ""
     legal_sources = f'<ul>{legal_items(legal["sources"])}</ul>' if legal["sources"] else ""
     status_chip = chip(item["status"], ISSUE) if show_status else ""
+    impact = item.get("impact") if structured else None
+    impact_note = (f'<p class="copy"><b>优先级依据</b> {reading_text(impact["reason"])}</p>'
+                   if isinstance(impact, dict) and impact.get("reason") else "")
     return f'''
 <article class="issue" id="issue-{issue_id}" data-section="{item["section"]}" data-status="{item["status"]}" data-confirmation="{confirmation}" data-priority="{item["priority"]}" tabindex="-1">
   <div class="issue-meta"><b>{issue_id}</b>{chip(item["priority"], PRIORITY)}<span>{SECTIONS[item["section"]]}</span>{status_chip}{confirmation_chip}
@@ -424,7 +473,7 @@ def issue_card(item, structured, evidence_count, figure_count, references=None, 
   {document_key}
   <div class="issue-reading">
     <div class="original" id="original-{issue_id}" tabindex="-1"><h4>{issue_id} 原文与位置</h4><ul>{original_items(item["originals"])}</ul></div>
-    <div class="finding"><h4>具体问题</h4><p class="copy">{reading_text(item["problem"])}</p></div>
+    <div class="finding"><h4>具体问题</h4><p class="copy">{reading_text(item["problem"])}</p>{impact_note}</div>
   </div>
   {related}{print_note}
   <div class="edits" id="edit-{issue_id}" tabindex="-1">
@@ -505,7 +554,121 @@ def validate_extensions(data, issue_ids):
             record(item, path, ("review",))
     validate_amendments(data, issue_ids)
     validate_causal(data)
+    validate_search_evidence(data)
     return data
+
+
+def validate_comparison(item, path, features, reference_ids):
+    record(item, path, ("id", "reference_id", "scheme", "eligibility"))
+    if item["reference_id"] not in reference_ids:
+        raise ValueError(f"{path}.reference_id 须引用文献目录中的单篇文献")
+    mapped = {}
+    for feature, feature_path in issue_rows(item, "features", path, ("feature_id", "reason")):
+        record(feature, feature_path, choices={"status": ("disclosed", "not_disclosed", "unverified")})
+        record(feature, feature_path, tuple(key for key in ("location", "quote", "checked_scope") if key in feature))
+        fid = feature["feature_id"]
+        if fid not in features or fid in mapped:
+            raise ValueError(f"{feature_path}.feature_id 未登记或重复")
+        if feature["status"] != "unverified":
+            record(feature, feature_path, ("location", "quote"))
+        if feature["status"] == "not_disclosed":
+            record(feature, feature_path, ("checked_scope",))
+        mapped[fid] = feature
+    if set(mapped) != set(features):
+        raise ValueError(f"{path}.features 须逐项覆盖全部特征，缺证据的特征标 unverified")
+    combination = record(item.get("combination"), f"{path}.combination", ("reason",),
+                         {"status": ("complete", "incomplete", "unverified")})
+    if "location" in combination:
+        record(combination, f"{path}.combination", ("location",))
+    if combination["status"] != "unverified":
+        record(combination, f"{path}.combination", ("location",))
+    if combination["status"] == "complete" and any(row["status"] != "disclosed" for row in mapped.values()):
+        raise ValueError(f"{path}.combination 完整组合须在本单篇方案中公开全部特征")
+    return mapped
+
+
+def require_checked_comparison(item, path):
+    if item["combination"]["status"] == "unverified" or any(
+            row["status"] == "unverified" for row in item["features"]):
+        raise ValueError(f"{path} 有待核特征或组合，不能标已核查")
+
+
+def validate_inventiveness(judgment, path, comparisons, features):
+    record(judgment, path, ("starting_comparison_id", "effect", "technical_problem"))
+    starting_id = judgment["starting_comparison_id"]
+    if starting_id not in comparisons:
+        raise ValueError(f"{path}.starting_comparison_id 未登记")
+    starting = comparisons[starting_id]
+    require_checked_comparison(starting, path)
+    differences = judgment.get("difference_ids")
+    source_links(differences, features, f"{path}.difference_ids")
+    actual = {row["feature_id"] for row in starting["features"] if row["status"] == "not_disclosed"}
+    if set(differences) != actual:
+        raise ValueError(f"{path}.difference_ids 须与起点方案未公开的特征逐项一致")
+    if not differences and starting["combination"]["status"] != "complete":
+        raise ValueError(f"{path} 须将缺失的配合关系或条件列为区别特征")
+    combination_path = f"{path}.combination"
+    combination = record(judgment.get("combination"), combination_path, ("reason",),
+                         {"status": ("supported", "unsupported", "not_needed")})
+    evidence = list(issue_rows(combination, "evidence", combination_path,
+                              ("comparison_id", "location", "quote", "reason"), required=False))
+    covered = set()
+    for row, row_path in evidence:
+        cid = row["comparison_id"]
+        if cid not in comparisons:
+            raise ValueError(f"{row_path}.comparison_id 未登记")
+        require_checked_comparison(comparisons[cid], row_path)
+        source_links(row.get("feature_ids"), actual, f"{row_path}.feature_ids")
+        if not row["feature_ids"]:
+            raise ValueError(f"{row_path}.feature_ids 须关联区别特征")
+        if combination["status"] == "supported":
+            disclosed = {feature["feature_id"] for feature in comparisons[cid]["features"]
+                         if feature["status"] == "disclosed"}
+            if not set(row["feature_ids"]) <= disclosed:
+                raise ValueError(f"{row_path} 结合依据所指特征须有公开证据")
+        covered.update(row["feature_ids"])
+    if combination["status"] == "not_needed":
+        if differences or evidence:
+            raise ValueError(f"{combination_path} 存在区别特征时须记录结合依据或缺乏依据的理由")
+    elif not differences:
+        raise ValueError(f"{combination_path} 无区别特征时应记录 not_needed 并说明理由")
+    elif combination["status"] == "supported" and covered != actual:
+        raise ValueError(f"{combination_path} 结合依据须覆盖全部区别特征")
+    elif combination["status"] == "unsupported":
+        record(combination, combination_path, ("checked_scope",))
+
+
+def validate_search_evidence(data):
+    """Require reviewable feature evidence before a reviewed label, for every schema."""
+    reference_ids = {row["id"] for row in data.get("references", [])}
+    for item, path in rows(data, "search"):
+        reviewed = any(item[key]["status"] == "reviewed" for key in ("novelty", "inventiveness"))
+        if not reviewed and "features" not in item and "comparisons" not in item:
+            continue
+        feature_rows = list(issue_rows(item, "features", path, ("id", "text", "claim_location")))
+        require_unique([row["id"] for row, _ in feature_rows], f"{path}.features.id")
+        features = {row["id"]: row for row, _ in feature_rows}
+        comparisons = {}
+        for comparison, comparison_path in issue_rows(item, "comparisons", path, ("id",)):
+            validate_comparison(comparison, comparison_path, features, reference_ids)
+            if comparison["id"] in comparisons:
+                raise ValueError(f"{comparison_path}.id 不得重复")
+            comparisons[comparison["id"]] = comparison
+        novelty = item["novelty"]
+        if novelty["status"] == "reviewed":
+            for comparison in comparisons.values():
+                require_checked_comparison(comparison, f"{path}.novelty / {comparison['id']}")
+            record(novelty, f"{path}.novelty", choices={
+                "result": ("complete_combination_found", "not_found_in_scope")})
+            complete = any(row["combination"]["status"] == "complete" for row in comparisons.values())
+            if complete != (novelty["result"] == "complete_combination_found"):
+                raise ValueError(f"{path}.novelty.result 与单篇文献的完整组合记录矛盾")
+        if item["inventiveness"]["status"] == "reviewed":
+            validate_inventiveness(item["inventiveness"], f"{path}.inventiveness", comparisons, features)
+    search_coverage = next(row for row in data["coverage"] if row["section"] == "search")
+    if search_coverage["status"] == "reviewed" and (not data["search"] or any(
+            item[key]["status"] != "reviewed" for item in data["search"] for key in ("novelty", "inventiveness"))):
+        raise ValueError("检索覆盖标已核查时，各独权的新颖性与创造性均须有已核查证据")
 
 
 def source_links(value, allowed, path):
@@ -550,8 +713,8 @@ def validate_cross_guidance(selected, guidance_ids, sources, path):
 def validate_amendments(data, issue_ids):
     if "amendment_options" not in data:
         return
-    if data.get("schema_version") not in (3, 4):
-        raise ValueError("amendment_options 需要 schema_version 3 或 4 和已记录的程序阶段")
+    if data.get("schema_version") not in (3, 4, 5):
+        raise ValueError("amendment_options 需要 schema_version 3 至 5 和已记录的程序阶段")
     option_ids = []
     for item, path in rows(data, "amendment_options"):
         record(item, path, ("id", "title", "target", "dependency", "text", "scope_change", "condition", "sync"),
@@ -885,6 +1048,31 @@ def render(data, folder, source_folder=None):
     if data.get("figure_notes"):
         records = [((reading_text(row["label"]), reading_text(row["text"]), reading_text(row["source"])), "") for row in data["figure_notes"]]
         figures += details("figure-notes", "附图与标号补充记录", '<div class="table-wrap">' + table(("核对项", "记录与建议", "位置"), records, "") + '</div>')
+    audit = data.get("figure_audit")
+    if data.get("schema_version", 1) >= 5:
+        labels = {"checked": "已逐图核对", "partial": "附图核对未齐", "not_applicable": "不涉及附图"}
+        mark_states = {"match": "一致", "suspect": "编号疑点", "unclear": "无法确认", "text_label": "图中文字"}
+        figures += paragraphs([labels[audit["status"]], audit.get("reason", "")])
+        legend = {row["mark"]: row for row in audit["legend"]}
+        audit_rows = []
+        for view in audit["views"]:
+            place = reading_text(view["figure"] + " · " + view["page"] + " · " + view["description_ref"])
+            if not view["marks"]:
+                audit_rows.append(((place, "—", "—", reading_text(view["reason"])), ""))
+            for mark in view["marks"]:
+                ref = legend.get(mark.get("legend_mark"))
+                definition = reading_text(f'{ref["mark"]} {ref["name"]} · {ref["source"]}') if ref else "—"
+                note = reading_text(mark_states[mark["status"]] + " " + mark.get("note", ""))
+                if mark.get("issue"):
+                    note += " " + issue_link(mark["issue"], mark["issue"])
+                audit_rows.append(((place, reading_text(mark["mark"] + " · " + mark["target"]), definition, note), ""))
+        for row in audit["legend"]:
+            if row.get("not_located_reason"):
+                audit_rows.append((("说明书反查", "—", reading_text(row["mark"] + " " + row["name"] + " · " + row["source"]),
+                                    reading_text(row["not_located_reason"])), ""))
+        if audit_rows:
+            figures += details("figure-audit", "逐图编号与说明书核对", '<div class="table-wrap">' +
+                               table(("图号、页码与图说", "图中编号及位置", "说明书记载", "核对结果"), audit_rows, "") + '</div>')
     figures += drawing_gallery(data, source_folder)
     chapters.append(("figures", "附图与原图", section("figures", "附图与原图", figures, "figure-table")))
     if data.get("conditions"):
@@ -906,6 +1094,7 @@ def render(data, folder, source_folder=None):
             search += details("search-log", "查看检索记录及待补项目", '<div class="table-wrap">' + table(("记录项", "本次记录与缺口"), records, "") + '</div>')
         search += '</div>'
     search += '<h3>独立权利要求的检索判断</h3><div class="table-wrap claim-search">' + search_table(data["search"]) + '</div>'
+    search += search_evidence_details(data["search"])
     chapters.append(("search", "现有技术", section("search", "现有技术", search, "search-table")))
     coverage_html = []
     for key, label in SECTIONS.items():

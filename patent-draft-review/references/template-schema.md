@@ -1,6 +1,14 @@
 # 模板数据与组件
 
-新报告使用 schema 4，基础字段见 [报告输出](report-output.md)，必须增加下述因果核查记录。旧数据 1／2／3 可生成，但缺少本项记录时首页明确显示“技术因果必查未完成”，不得作为本项已通过的报告。字段均为纯文本或结构化数组，生成器统一转义；不接收任意 HTML、脚本或远程图像。
+新报告使用 schema 5，基础字段见 [报告输出](report-output.md)，包含因果核查、逐图标号以及影响分级。旧数据 1 至 4 可生成。旧数据缺少因果记录时首页保留未完成提示。字段均为纯文本或结构化数组，生成器统一转义，不接收任意 HTML、脚本或远程图像。
+
+## 附图编号和意见优先级
+
+- `figure_audit` 含 `status`（`checked` / `partial` / `not_applicable`）、`legend` 和 `views`。不适用时两个数组为空，且附图覆盖为 `na`。`partial` 或 `not_applicable` 须填 `reason`。素材无图或不可辨时保持缺口，不写已核查。
+- `legend[]` 记录 `mark`、`name`、`source`（说明书原文位置）。同一编号在说明书中的不同定义合列并说明冲突。反查未定位的条目填写 `not_located_reason`。
+- `views[]` 逐一对应 `figures` 的 `figure` 与 `page`，并填 `description_ref`（图说或正文定位，缺少记载时如实写）、`status`（`checked` / `missing` / `unread` / `unreadable`）、`marks`。空标号数组写 `reason`，缺图或不可读也如此。可读的无标号状态图允许 `checked` 并说明。已核对视图的 `figures.visual_status` 应为 `seen` 或 `unclear`。
+- `marks[]` 每处引注填写 `mark`（图中显示原样）、`target`（位置与指向）、`status`（`match` / `suspect` / `unclear` / `text_label`）。`match` 的 `legend_mark` 必须等于 `mark`。其余状态写 `note`；有可比说明书记载时填 `legend_mark`。`suspect` 关联 `issue`。重复编号按不同引注位置分别登记。
+- 每条 `issues[]` 增加 `impact`。`claim` 取 `none` / `local` / `material`，`effect` 取 `none` / `local` / `core`，并填 `reason`。实质权项影响填写 `claim_target`，核心效果影响填写 `effect_target`。任一达到实质权项或核心效果影响时为 `high`；局部为 `medium`；其余为 `low`。用原件和本案目标判断影响级别。因果缺口 `critical` 与对应未决高优先级意见一致。
 
 ## 因果必查数据
 
@@ -90,3 +98,7 @@ v0.5.1 的同一实施例候选沿用原字段。已有跨实施例候选标为 
 v0.5.0 的已有候选需要补齐完整性、范围、采纳安排、实施例编号／互斥关系、来源归属和权项路径等记录。先保留旧数据，再回到原件核对；不能按名称相似就批量认定同属实施例，也不能自动把组合状态升为有依据。旧候选缺字段时新版拒绝生成并指出字段路径。未使用候选字段的 schema 1／2／3、以及 schema 3 的空候选数组继续兼容。
 
 将原本写在临时生成脚本中的概览段落、路径、工况、文献索引、图片和复核状态移入对应字段。直接生成并比对原始摘录、判断对象、关系数量及图像哈希。不要把旧脚本的后处理替换继续串在新版输出之后。旧交付保留，样板单独命名。
+
+## 逐特征现有技术证据
+
+v0.6.3 沿用 schema 5。在 `search[]` 内增加 `features` 和 `comparisons`，已核查的新颖性及创造性分别增加完整组合结果、区别特征和结合依据。字段、合法状态、旧数据迁移与示例见 [逐特征现有技术证据](search-evidence.md)。生成器对所有受支持 schema 的已核查判断执行同一校验。证据明细在现有技术章节直接展开，打印保留。

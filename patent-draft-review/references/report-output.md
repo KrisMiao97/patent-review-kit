@@ -6,7 +6,7 @@
 
 ## 填表顺序
 
-1. **概览与覆盖。** 新报告先完成 schema 4 的因果必查。按原件填权项速览及其 `claim_type`，交叉核对独权检索和因果目标。已有权项对照或权项修改候选同样属于功能性审阅的记录，不能整体标不适用。首页自动显示未决因果缺口，关键缺口须关联高优先级意见。优先待办按实际阅读顺序列一至四项，每项链接到原意见。角色写建议分工，责任人未确定时标为「待定」。完整覆盖放在审核范围，逐项列研发交底、权利要求、说明书、附图、摘要、申请信息和独权检索。审阅覆盖与问题处置状态分开。
+1. **概览与覆盖。** 新报告先完成 schema 5 的因果必查、逐图编号和意见影响分级。按原件填权项速览及其 `claim_type`，交叉核对独权检索和因果目标。已有权项对照或权项修改候选同样属于功能性审阅的记录，不能整体标不适用。首页显示未决因果缺口，按实际影响关联高优先级意见。优先待办列一至四项，每项链接到原意见。角色写建议分工，责任人未确定时标为「待定」。完整覆盖放在审核范围，逐项列研发交底、权利要求、说明书、附图、摘要、申请信息和独权检索。审阅覆盖与问题处置状态分开。
 2. **逐图与图文矩阵。** 先列本轮范围内的各图及实际查看状态。每个独权关键限定、每条有疑点的从属引用路径或项内分支各占至少一行。保留权项原句、说明书定位、图号、页码、可见关系或未能核查原因、支持状态及关联意见。工况按区间、端点或初始状态分行。把触发条件写在核查限定，在核查说明中按前态、动作、后态记录原文明确的内容和待确认项。未见于图和图未实看分别写清。
 3. **独立项检索。** 每个独立项分别记录新颖性和创造性。写检索来源、实际范围、文献原文位置、日期核查及局限，未执行时写原因和下一步。图文矩阵的本案材料与现有技术证据分开。
 4. **逐条意见。** 用稳定编号串联摘要、原文、证据和后续复核。先给一句摘要，再按「原文与位置 → 具体问题 → 对应图证 → 适用阶段和改法 → 可展开的法律依据」组织。法律类别在折叠时仍可见。区分待核事项、优先级、法律判断和处理进度。相关图文、附图只使用已显式关联该编号的记录。深链接保留编号和返回入口。适用程序及关键限制写在改法旁，阅读说明只作补充。原文未明确时，写需确认的具体事实和条件。
@@ -24,7 +24,7 @@ python scripts/render_review.py 审核数据.json --output 案件名_专利审�
 
 | 字段 | 内容 |
 | --- | --- |
-| `schema_version` | 新报告填整数 `4`。 |
+| `schema_version` | 新报告填整数 `5`，含逐图标号和影响分级。 |
 | `title, version, stage, conclusion` | 案件名、稿件版本、审稿阶段及一句结论。阶段写申请前、审查中、授权公告后或经核实的具体程序。 |
 | `causal_review` | 必填问题、权项路径、作用过程、分环节依据、效果条件及缺口；结构见 [因果必查数据](template-schema.md#因果必查数据)。 |
 | `phase` | 结构化阶段 `before_filing`（申请前）、`pending`（审查中）、`granted`（授权公告后）、`unknown`（待核）。与展示用的 `stage` 保持一致。 |
@@ -33,7 +33,7 @@ python scripts/render_review.py 审核数据.json --output 案件名_专利审�
 | `coverage[]` | `section,status,note`。板块 `disclosure,claims,description,drawings,abstract,filing,search` 各一项。状态 `reviewed,partial,unread,missing,na` 对应已审、部分核对、未核读、缺材料、不适用。 |
 | `figures[]` | `figure,page,visual_status,observation,issues`。逐图记录。同一图号可在不同页出现。 |
 | `evidence[]` | `claim,path,feature,quote,description,figure,page,visual_status,observation,support_status,issues`。原文写在 `quote`，说明书位置及记载写在 `description`。支持状态 `supported,partial,gap,unverified,na` 对应有支持、部分支持、缺口、待核、不适用。 |
-| `search[]` | 每个独立项一条 `claim,scope,novelty,inventiveness`。`scope` 记来源和范围。`novelty` 与 `inventiveness` 均为 `{status,basis}`，状态 `reviewed,partial,not_run`。 |
+| `search[]` | 每个独立项一条 `claim,scope,novelty,inventiveness`。`scope` 记来源和范围。`novelty` 与 `inventiveness` 均为 `{status,basis}`，状态 `reviewed,partial,not_run`。已核查另须填写 [逐特征证据](search-evidence.md)；缺证据可据实保留部分核查。 |
 | `issues[]` | `id,section,title,status,priority,summary,confirmation,problem,originals,legal,edits`。处理状态 `pending,adopted,rejected,resolved`，优先级 `high,medium,low`。`summary` 一句话交代要核实的事项及其影响，`problem` 保留技术和证据细节。`confirmation` 取 `technical,evidence,search,writing,decision,none`，分别表示待研发确认、待补证据、待检索比对、文稿校订、待决定、无待核事项。 |
 | `deliverables[]` | `name,status,note`。状态 `ready,pending,not_requested,unavailable` 对应已交付、待完成、未要求、未生成。已交的 Word 可用 `file` 填同目录 DOCX 文件名。 |
 

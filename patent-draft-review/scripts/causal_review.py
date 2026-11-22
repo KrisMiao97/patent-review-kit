@@ -141,8 +141,10 @@ def validate_causal(data):
             unresolved = [issues[x] for x in linked if issues[x]["status"] in ("pending", "adopted")]
             if not unresolved:
                 raise ValueError(f"{path} 因果缺口仍在，关联意见不能全部标为已解决或未采纳")
-            if targets[row["target_id"]]["kind"] in ("independent", "unavailable") and not row["critical"]:
+            if data.get("schema_version", 1) < 5 and targets[row["target_id"]]["kind"] in ("independent", "unavailable") and not row["critical"]:
                 raise ValueError(f"{path} 独立项或材料缺失的因果缺口必须标为关键")
+            if data.get("schema_version", 1) >= 5 and row["critical"] != any(x["priority"] == "high" for x in unresolved):
+                raise ValueError(f"{path} 的关键缺口状态须与本行所关联意见的实质影响一致")
             if row["critical"] and not any(x["priority"] == "high" for x in unresolved):
                 raise ValueError(f"{path} 关键依据缺失必须关联高优先级未解决意见")
     if covered_targets != set(targets) or covered_problems != set(problems):

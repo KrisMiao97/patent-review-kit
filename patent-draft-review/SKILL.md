@@ -1,13 +1,11 @@
 ---
 name: patent-draft-review
-description: "专利审稿。适用于申请前审代理稿、复核返稿、检查说明书支持、图文一致性和技术效果依据，也支持使用方审阅公开或授权文本。核查权项引用、工况和独立项检索证据，交付可追溯的离线 HTML 审稿报告，可按需导出 Word 批注版和清洁版。 Pre-filing patent review for applicants and in-house IP teams. Use to review draft and revised patent applications, check claim support in the specification and drawings, and document technical evidence gaps."
+description: "从申请人或使用方立场审阅专利申请稿、返稿及公开或授权文本。先核对法域、程序和文本版本，将技术问题、方案与效果的因果对应设为必查项，再核查权项路径、图文、工况及独立项检索证据。交付带筛选、证据跳转和内嵌原图的离线专利审核报告；输出设计规范与模板统一维护，可按需导出 Word 批注版和清洁版。"
 metadata:
-  version: "0.6.1"
+  version: "0.6.3"
 ---
 
 # 专利审稿
-
-用虚构种苗箱样稿、附图和带原文证据的示例报告试审一次。[打开公开试用页](https://krismiao97.github.io/patent-review-kit/) · [40 lx example in English](https://krismiao97.github.io/patent-review-kit/#example-en)
 
 用 [审稿与证据](references/review-method.md) 审核明确版本的申请材料。每次功能性审稿必读并执行 [技术因果必查](references/causal-review.md)，在润色和候选改写前完成问题及权项清单、逐条因果对应和缺证据意见。涉及附图、尺寸、控制条件或备选路径时读 [图文与工况核对](references/technical-review.md)。组织交付时读 [专利审核报告](references/report-output.md) 与 [输出设计规范](DESIGN.md)，模板扩展字段见 [数据与组件](references/template-schema.md)。要求 Word 时另读 [Word 双版本](references/word-output.md)。
 
@@ -20,7 +18,13 @@ metadata:
 
 7. **收到报告复审意见时先核实，再固化通用规则。** 同时检查源数据、生成器和实际页面。重复显示的数字若来自同一计算结果，不认定为多处手写。界面修订逐字比对原文摘录、法律判断与内嵌图像，实测体积后再讨论压缩。改通用模板时用另一案件或虚构数据检查空记录、不同状态和缺少关联证据，避免把本案的条数、文献号或法域写死。见 [复审与验收](references/report-validation.md)。
 
-本包维护版本以本目录及用户指定发布包为准。继续修改前保留真实基线。v0.6.1 沿用 schema 4，在现有记录中补强因果适用性与独权覆盖校验。新版速览填写结构化 `claim_type`，既有类型可辨的记录无须换版。缺因果记录的旧数据 1／2／3 仍可阅读，首页提示未完成本项核查。离线生成只需 Python 3.10+，视觉验收另需可用浏览器。
+新审稿按 [逐图编号与影响分级](references/technical-review.md#逐图编号与影响分级) 建立图号清单、逐个核对引注并反查说明书。看过图与完成标号核对分别记录。每条意见先确定对权项及核心效果的影响，再定优先级。有线与无线等条件若可合理共存，说明实际需要澄清的范围，不将已明确披露的通信等功能重复列为待核。按 [新版字段](references/template-schema.md#附图编号和意见优先级) 用 schema 5 生成。既有 schema 1 至 4 照常读取。
+
+新颖性或创造性标为「已核查」前，执行 [逐特征现有技术证据](references/search-evidence.md)。按权项原文登记全部特征及配合条件，为每个文献方案填写逐项公开或未公开证据。新颖性逐篇核对完整组合；创造性记录起点、区别、效果、技术问题及结合依据。生成器对 schema 1 至 5 一致检查，旧已核查记录需补证据或据实改为部分核查。
+
+复用其他专利 Skill 的引文、条件或审查记录时，交接前按 [证据交接](references/evidence-handoff.md) 校验已采纳与当前记录、实际原件指纹。将回查项对应本地意见或权项，重新核对后才采纳当前版本。
+
+维护版为 v0.6.3。继续修改前保留真实基线。离线生成只需 Python 3.10+，视觉验收另需可用浏览器。
 
 交付前对照 [报告验收](references/report-output.md#交付验收)。核对意见的原文、适用依据和修改落点，抽查附图、工况出处与网页操作。Word 单独记为已交、未要求或未生成并说明原因。声称已生成时核验两份正文一致及批注状态。
 

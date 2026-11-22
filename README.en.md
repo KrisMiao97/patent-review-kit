@@ -1,5 +1,7 @@
 # Patent Review Kit
 
+[GitHub skill package v0.6.3](https://github.com/KrisMiao97/patent-review-kit/releases/tag/v0.6.3) · The WorkBuddy share uses a separate release channel.
+
 [简体中文](README.md) · [Changelog](CHANGELOG.md)
 
 Review a patent draft before filing. Check the claims against the specification and drawings, then share actionable feedback with the drafter. Each issue includes source locations, evidence gaps, a proposed edit, and conditions for adopting it.
@@ -54,4 +56,4 @@ Run from the repository root. The HTML renderer uses Python 3.10+ and its standa
 python patent-draft-review/scripts/render_review.py patent-draft-review/examples/seedling-box/review.json --output demo-local.html
 ```
 
-Current skill version is v0.6.1. See [requirements.txt](requirements.txt), the [Word export guide](patent-draft-review/references/word-output.md), and the [template schema](patent-draft-review/references/template-schema.md) for details.
+Current skill version is v0.6.3. See [requirements.txt](requirements.txt), the [Word export guide](patent-draft-review/references/word-output.md), and the [template schema](patent-draft-review/references/template-schema.md) for details.

@@ -1,5 +1,7 @@
 # 专利审稿工具包
 
+[GitHub 通用安装包 v0.6.3](https://github.com/KrisMiao97/patent-review-kit/releases/tag/v0.6.3) · WorkBuddy 分享页为独立更新渠道。
+
 [English](README.en.md) · [版本记录](CHANGELOG.md)
 
 收到专利代理稿后，逐条核对权利要求、说明书和附图，生成一份可以反馈给代理师的审稿意见。每条意见标明原文位置、证据缺口、建议改法和采纳条件。
@@ -54,4 +56,4 @@ npx skills add https://github.com/KrisMiao97/patent-review-kit --skill patent-dr
 python patent-draft-review/scripts/render_review.py patent-draft-review/examples/seedling-box/review.json --output demo-local.html
 ```
 
-当前 Skill 版本为 v0.6.1。Word 依赖见 [requirements.txt](requirements.txt)。具体交付条件见[输出说明](patent-draft-review/references/word-output.md)，报告字段见[模板数据说明](patent-draft-review/references/template-schema.md)。
+当前 Skill 版本为 v0.6.3。Word 依赖见 [requirements.txt](requirements.txt)。具体交付条件见[输出说明](patent-draft-review/references/word-output.md)，报告字段见[模板数据说明](patent-draft-review/references/template-schema.md)。
