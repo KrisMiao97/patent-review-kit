@@ -1,6 +1,6 @@
 # Patent Review Kit
 
-[GitHub skill package v0.6.3](https://github.com/KrisMiao97/patent-review-kit/releases/tag/v0.6.3) · The WorkBuddy share uses a separate release channel.
+[GitHub skill package v0.6.3](https://raw.githubusercontent.com/KrisMiao97/patent-review-kit/467b24c97eddc17c5d71567717d651823ecb9008/downloads/patent-draft-review-v0.6.3.zip) · The WorkBuddy share uses a separate release channel.
 
 [简体中文](README.md) · [Changelog](CHANGELOG.md)
 

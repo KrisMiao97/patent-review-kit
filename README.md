@@ -1,6 +1,6 @@
 # 专利审稿工具包
 
-[GitHub 通用安装包 v0.6.3](https://github.com/KrisMiao97/patent-review-kit/releases/tag/v0.6.3) · WorkBuddy 分享页为独立更新渠道。
+[GitHub 通用安装包 v0.6.3](https://raw.githubusercontent.com/KrisMiao97/patent-review-kit/467b24c97eddc17c5d71567717d651823ecb9008/downloads/patent-draft-review-v0.6.3.zip) · WorkBuddy 分享页为独立更新渠道。
 
 [English](README.en.md) · [版本记录](CHANGELOG.md)
 
